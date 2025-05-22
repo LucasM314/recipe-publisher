@@ -1,0 +1,71 @@
+{
+    "name": "Nom de la recette",
+    "type": "dessert", // valeurs possibles : "entrée", "plat", "dessert", "accompagnement
+    "description": "Description de la recette.",
+    "image_filename": "https://example.com/path/to/image.jpg",
+    "durations": {
+      "total": "...", // e.g., "1h 30min"
+      "preparation": "...", // e.g., "30min"
+      "cooking": "...", // e.g., "1h"
+      "rest": "..." // e.g., "2h" or "N/A"
+    },
+    "utensils": [
+      "Nom de l'ustensile 1",
+      "Nom de l'ustensile 2"
+      // ... ajouter d'autres ustensiles ici
+    ],
+    "ingredients": {
+      "serves": "5 personnes", // Ou "8 gourmands", "6-8 parts", etc.
+      "list": [
+        {
+          "name": "Nom de l'ingrédient 1",
+          "quantity": "Quantité et unité" // e.g., "200g", "1 cuillère à soupe"
+        },
+        {
+          "name": "Nom de l'ingrédient 2",
+          "quantity": "Quantité et unité"
+        }
+        // ... ajouter d'autres ingrédients ici
+      ]
+    },
+    "instructions": [
+      "Première étape de la préparation.",
+      "Deuxième étape de la préparation."
+      // ... ajouter d'autres étapes ici
+    ]
+  }
+
+// Without comments for copy/pasting:
+{
+  "name": "Nom de la recette",
+  "type": "entrée | plat | dessert | accompagnement",
+  "description": "Description de la recette.",
+  "image_filename": "https://example.com/path/to/image.jpg",
+  "durations": {
+    "total": "",
+    "preparation": "",
+    "cooking": "",
+    "rest": ""
+  },
+  "ingredients": {
+    "serves": "5 personnes | 8 gourmands | 6-8 parts",
+    "list": [
+      {
+        "name": "Nom de l'ingrédient 1",
+        "quantity": "Quantité et unité"
+      },
+      {
+        "name": "Nom de l'ingrédient 2",
+        "quantity": "Quantité et unité"
+      }
+    ]
+  },
+  "utensils": [
+    "Nom de l'ustensile 1",
+    "Nom de l'ustensile 2"
+  ],
+  "instructions": [
+    "Première étape de la préparation.",
+    "Deuxième étape de la préparation."
+  ]
+}

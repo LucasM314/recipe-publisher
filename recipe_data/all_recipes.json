@@ -1,0 +1,83 @@
+[
+  {
+    "name": "Quiche Lorraine",
+    "type": "plat",
+    "description": "Une quiche Lorraine façon maman (avec tomates !) et rapide à faire.",
+    "image_filename": "quiche_lorraine.jpg",
+    "durations": {
+      "total": "",
+      "preparation": "15 minutes",
+      "cooking": "30-40 minutes",
+      "rest": ""
+    },
+    "ingredients": {
+      "serves": "2 personnes",
+      "list": [
+        {
+          "name": "Pâte brisée",
+          "quantity": "1"
+        },
+        {
+          "name": "Oeufs",
+          "quantity": "3"
+        },
+        {
+          "name": "Lardons fumés",
+          "quantity": "200g"
+        },
+        {
+          "name": "Tomates",
+          "quantity": "2"
+        },
+        {
+          "name": "Fromage"
+        }
+      ]
+    },
+    "utensils": [
+      "Four",
+      "Plat à tarte"
+    ],
+    "instructions": [
+      "Préchauffer le four à 180°C.",
+      "Étaler la pâte brisée dans un moule à tarte et la piquer avec une fourchette.",
+      "Faire précuire la pâte à blanc pendant 10 minutes. (attention à ce qu'elle ne gonfle pas trop)",
+      "Pendant ce temps, faire revenir légèrement les lardons fumés, couper les tomates en petits cubes en retirant l'excédent de liquide, et, dans un récipient, battre les 3 oeufs en omelette, saler et poivrer.",
+      "Ajouter le mélange d'oeuf, les lardons, les dés de tomates et le fromage (hehehe cheh papa) dans un récipient. Etaler le tout sur le fond de tarte précuit.",
+      "Enfourner et laisser cuire pendant environ 30 à 40 minutes, jusqu'à ce que la quiche soit bien dorée et que la garniture soit prise."
+    ]
+  },
+  {
+    "name": "Nom de la recette",
+    "type": "dessert",
+    "description": "Description de la recette.",
+    "image_filename": "https://example.com/path/to/image.jpg",
+    "durations": {
+      "total": "5",
+      "preparation": "9",
+      "cooking": "",
+      "rest": ""
+    },
+    "utensils": [
+      "Nom de l'ustensile 1",
+      "Nom de l'ustensile 2"
+    ],
+    "ingredients": {
+      "serves": "5 personnes",
+      "list": [
+        {
+          "name": "Nom de l'ingrédient 1",
+          "quantity": "Quantité et unité"
+        },
+        {
+          "name": "Nom de l'ingrédient 2",
+          "quantity": "Quantité et unité"
+        }
+      ]
+    },
+    "instructions": [
+      "Première étape de la préparation.",
+      "Deuxième étape de la préparation."
+    ]
+  }
+]

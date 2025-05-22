@@ -1,0 +1,13 @@
+/* Styles spécifiques pour les plats */
+body.type-plat {
+    background-color: #f0f8ff; /* AliceBlue léger */
+}
+
+.type-plat h1 {
+    color: #8B4513; /* SaddleBrown */
+}
+
+.type-plat .durees {
+    border-left: 5px solid #8B4513;
+    padding-left: 15px;
+}

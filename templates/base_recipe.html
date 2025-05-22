@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ recipe.name }} | Recette</title>
+    <!-- Le favicon peut être ajouté plus tard si vous en avez un -->
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png"/> -->
+    
+    <!-- CSS principal, qui contiendra les styles du fichier style.css fourni -->
+    <link rel="stylesheet" href="css/style_base.css" /> 
+    
+    <!-- CSS spécifiques au type de recette (optionnel, peut être fusionné ou adapté) -->
+    {% if recipe.type and recipe.type != 'default' %}
+    <link rel="stylesheet" href="css/style_{{ recipe.type }}.css">
+    {% endif %}
+
+    <!-- CSS pour l'impression -->
+    <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+    <main>
+        <section class="recipe-page-section">
+            <div class="recipe-page-content-container">
+                
+
+                <h1>{{ recipe.name }}</h1>
+                {% if recipe.description %}
+                <p>{{ recipe.description }}</p>
+                {% endif %}
+
+                <div class="preparation-and-utensils-wrapper">
+                    {# Section Durées (Preparation time) #}
+                    {% if recipe.durations %}
+                        {% set has_any_duration = false %}
+                        {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}{% set has_any_duration = true %}{% endif %}
+                        {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}{% set has_any_duration = true %}{% endif %}
+                        {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}{% set has_any_duration = true %}{% endif %}
+                        {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}{% set has_any_duration = true %}{% endif %}
+                        
+                        {% if has_any_duration %}
+                        <div class="preparation-container">
+                            <h3>Temps de préparation</h3>
+                            <ul class="preparation-list">
+                                {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}
+                                <li><span>Total :</span> {{ recipe.durations.total }}</li>
+                                {% endif %}
+                                {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}
+                                <li><span>Préparation :</span> {{ recipe.durations.preparation }}</li>
+                                {% endif %}
+                                {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}
+                                <li><span>Cuisson :</span> {{ recipe.durations.cooking }}</li>
+                                {% endif %}
+                                {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}
+                                <li><span>Repos :</span> {{ recipe.durations.rest }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {# Section Ustensiles #}
+                    {% if recipe.utensils and recipe.utensils|length > 0 %}
+                    <div class="utensils-container preparation-container"> {# Réutilisation de la classe pour un style similaire #}
+                        <h3>Ustensiles</h3>
+                        <ul class="utensils-list preparation-list"> {# Réutilisation de la classe #}
+                            {% for utensil in recipe.utensils %}
+                            <li><span>{{ utensil }}</span></li> {# Les ustensiles sont souvent juste le nom #}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+                {% if recipe.ingredients and recipe.ingredients.list and recipe.ingredients.list|length > 0 %}
+                <h2>Ingrédients</h2>
+                <ul class="ingredients-list">
+                    {% for ingredient_item in recipe.ingredients.list %}
+                    <li><span>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</span></li>
+                    {# Si vous voulez la quantité en gras, il faudra structurer différemment le JSON ou le CSS #}
+                    {# Exemple: <li><strong>{{ ingredient_item.quantity }}</strong> {{ ingredient_item.name }}</li> #}
+                    {% endfor %}
+                </ul>
+                <span class="separation-line"></span> {# Ligne de séparation #}
+                {% endif %}
+
+
+                {% if recipe.instructions and recipe.instructions|length > 0 %}
+                <h2>Instructions</h2>
+                <ol class="instruction-list">
+                    {% for step in recipe.instructions %}
+                    <li>
+                        {# Le style original avait un titre d'étape puis le texte. #}
+                        {# Si vos instructions sont juste du texte, c'est plus simple. #}
+                        {# Si vous avez une structure "TitreEtape: TexteEtape", il faudra adapter le JSON et ici. #}
+                        <span>{{ step }}</span> {# Affichage direct de l'étape #}
+                    </li>
+                    {% endfor %}
+                </ol>
+                {# Pas de section Nutrition demandée #}
+                <!-- <span class="separation-line"></span> --> {# Ligne de séparation si besoin avant le footer #}
+                {% endif %}
+
+                {% if recipe.image_filename %}
+                <img src="recipe_images/{{ recipe.image_filename }}" alt="Illustration de {{ recipe.name }}" />
+                {% else %}
+                <!-- Optionnel: une image placeholder si aucune image n'est fournie -->
+                <!-- <img src="placeholder.jpg" alt="Pas d'image disponible" /> -->
+                {% endif %}
+            </div>
+        </section>
+    </main>
+     <!-- Footer simple, le design original n'en a pas dans le contenu principal -->
+    <footer class="attribution" style="text-align:center; padding: 20px; font-family: var(--font1); font-size:0.8em; color: var(--WengeBrown);">
+        Recette générée avec ❤️
+    </footer>
+</body>
+</html>
