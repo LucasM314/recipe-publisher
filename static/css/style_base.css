@@ -59,6 +59,49 @@ body {
   line-height: 1.6;
 }
 
+/* Styles pour le bouton de retour à l'accueil */
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    background-color: #9a3737d4;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.home-button:hover,
+.home-button:focus {
+    background-color: rgba(103, 37, 37, 0.83);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.home-button:active {
+    transform: translateY(0px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.home-button svg {
+    width: 100%; /* L'SVG prendra la taille permise par le padding du bouton */
+    height: 100%;
+}
+
 .recipe-page-section {
   margin: 40px auto;
   display: grid;
@@ -135,9 +178,9 @@ body {
 .preparation-list > li, .utensils-list > li {
   margin-left: 5px; 
 }
-.preparation-list li > span:first-child, 
-.utensils-list li > span:first-child { 
-  font-weight: 600; 
+.preparation-list li > span:first-child,
+.utensils-list li > span:first-child {
+  font-weight: 600;
 }
 .preparation-list li > span:first-child {
    padding-right: 5px;
