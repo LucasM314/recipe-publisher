@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_title | default("Recipe Publisher") }}</title>
+    <!-- Link to your main CSS file. Adjust path as needed.
+         This assumes index.html is in the root of your output, and css is in output/css/ -->
+    <link rel="stylesheet" href="css/style_base.css">
+    <link rel="stylesheet" href="css/style_index.css"> <!-- Specific CSS for homepage -->
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>{{ site_title | default("Recipe Publisher") }}</h1>
+        <p class="tagline">{{ site_tagline | default("Découvrez nos meilleures recettes, faciles à préparer !") }}</p>
+        <!-- You could add a navigation menu here if you have other pages -->
+        <!-- <nav>
+            <a href="#">Accueil</a>
+            <a href="#">À Propos</a>
+        </nav> -->
+    </header>
+
+    <main class="homepage-content">
+        <section class="recipe-gallery">
+            <h2>Toutes les recettes</h2>
+
+            {% if recipes_summary_list %}
+                <div class="recipe-grid">
+                    {% for recipe_summary in recipes_summary_list %}
+                    <article class="recipe-card type-{{ recipe_summary.type | default('default') }}">
+                        <a href="{{ recipe_summary.html_filename }}" class="recipe-card-link">
+                            {% if recipe_summary.image_path %}
+                            <div class="recipe-card-image-container">
+                                <img src="{{ recipe_summary.image_path }}" alt="Photo de {{ recipe_summary.name }}">
+                            </div>
+                            {% else %}
+                            <div class="recipe-card-image-placeholder">
+                                <span>Pas d'image</span>
+                            </div>
+                            {% endif %}
+                            <div class="recipe-card-content">
+                                <h3>{{ recipe_summary.name }}</h3>
+                                {% if recipe_summary.description %}
+                                    <p class="recipe-card-description">{{ recipe_summary.description | truncate(100) }}</p>
+                                {% endif %}
+                                <!-- Optional: Display type or other quick info -->
+                                {% if recipe_summary.type and recipe_summary.type != 'default' %}
+                                    <span class="recipe-card-type">{{ recipe_summary.type | capitalize }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-recipes-message">Aucune recette disponible pour le moment. Revenez bientôt !</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Site fait avec ❤️</p>
+    </footer>
+
+</body>
+</html>

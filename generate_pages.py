@@ -1,9 +1,10 @@
+from datetime import datetime
 import json
 import shutil
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML as WeasyHTML, CSS as WeasyCSS  # <-- NOUVEAU
-from weasyprint.text.fonts import FontConfiguration  # <-- NOUVEAU pour les polices
+from weasyprint import HTML as WeasyHTML, CSS as WeasyCSS
+from weasyprint.text.fonts import FontConfiguration
 
 # ... (le reste de vos configurations reste identique) ...
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -22,6 +23,60 @@ OUTPUT_PDF_DIR = OUTPUT_DIR / "pdf_recipes"  # <-- NOUVEAU: Dossier pour les PDF
 
 SOURCE_STATIC_CSS_DIR = PROJECT_ROOT / "static" / "css"
 SOURCE_STATIC_FONTS_DIR = PROJECT_ROOT / "static" / "fonts"
+
+
+def generate_homepage(all_recipes_data, env):
+    print("\nGenerating homepage...")
+    homepage_template = env.get_template("index.html")  # New template name
+
+    recipes_summary_list = []
+    for recipe_data in all_recipes_data:
+        if not isinstance(recipe_data, dict):
+            continue  # Skip invalid entries
+
+        # Ensure html_filename is generated using the same logic as individual pages
+        # This assumes individual pages are in OUTPUT_DIR root.
+        # If they are in a subfolder, adjust here.
+        html_filename = generate_safe_filename(
+            recipe_data.get("name", "untitled"), extension="html"
+        )
+
+        # Construct relative image path for the homepage
+        # Assumes images are in OUTPUT_RECIPE_IMAGES_DIR relative to OUTPUT_DIR
+        image_path = None
+        if recipe_data.get("image_filename"):
+            # Path relative to the index.html location (which is OUTPUT_DIR)
+            image_path = (
+                f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{recipe_data['image_filename']}"
+            )
+
+        summary = {
+            "name": recipe_data.get("name", "Titre inconnu"),
+            "html_filename": html_filename,  # e.g., "ma_recette.html"
+            "image_path": image_path,  # e.g., "recipe_images/mon_image.jpg"
+            "description": recipe_data.get("description", ""),
+            "type": recipe_data.get("type", "default"),
+        }
+        recipes_summary_list.append(summary)
+
+    # Data for the homepage template
+    homepage_context = {
+        "site_title": "Les recettes de mamounette",  # Or get from a config file
+        "site_tagline": "Joyeuse fête des mères !",
+        "recipes_summary_list": recipes_summary_list,
+        "current_year": datetime.now().year,
+    }
+
+    try:
+        homepage_html_content = homepage_template.render(homepage_context)
+        output_homepage_path = OUTPUT_DIR / "index.html"
+        output_homepage_path.write_text(homepage_html_content, encoding="utf-8")
+        print(f"  Homepage générée : {output_homepage_path}")
+    except Exception as e:
+        print(f"  Erreur lors de la génération de la page d'accueil : {e}")
+        import traceback
+
+        traceback.print_exc()
 
 
 def generate_safe_filename(
@@ -264,6 +319,9 @@ def main():
             import traceback
 
             traceback.print_exc()  # Imprime la trace complète de l'erreur WeasyPrint
+
+    if all_recipes_data: # Ensure there's data to process
+        generate_homepage(all_recipes_data, env)
 
     print(
         f"\nProcessing complete. Check the '{OUTPUT_DIR}' and '{OUTPUT_PDF_DIR}' directories."
