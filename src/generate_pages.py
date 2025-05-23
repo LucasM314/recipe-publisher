@@ -59,7 +59,7 @@ def generate_homepage(all_recipes_data, env):
         recipes_summary_list.append(summary)
 
     homepage_context = {
-        "site_title": "Les recettes de mamounette",
+        "site_title": "Le Grimoire de Véro",
         "site_tagline": "Joyeuse fête des mères !",
         "recipes_summary_list": recipes_summary_list,
         "current_year": datetime.now().year,
@@ -248,7 +248,7 @@ def main():
         # Context for rendering the individual recipe page
         recipe_page_context = {
             "recipe": recipe_data,
-            "site_title": "Les recettes de mamounette",  # Pass site title for consistency in <title>
+            "site_title": "Le Grimoire de Véro",  # Pass site title for consistency in <title>
         }
 
         # Generate HTML page
