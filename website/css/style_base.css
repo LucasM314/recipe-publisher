@@ -1,0 +1,288 @@
+/* Importation des polices locales */
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/outfit/Outfit-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 900; /* Plage de variation */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/outfit/static/Outfit-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/outfit/static/Outfit-SemiBold.ttf') format('truetype');
+  font-weight: 600; /* Le style original utilise 600 pour certains éléments */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Young Serif';
+  src: url('../fonts/young-serif/YoungSerif-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --Nutmeg: hsl(14, 45%, 36%);
+  --DarkRaspberry: hsl(332, 51%, 32%);
+
+  --White: hsl(0, 0%, 100%);
+  --Eggshell: hsl(30, 54%, 90%);
+  --LightGrey: hsl(30, 18%, 87%);
+  --WengeBrown: hsl(30, 10%, 34%);
+  --DarkCharcoal: hsl(24, 5%, 18%);
+  --RoseWhite: hsl(330, 100%, 98%);
+
+  --font1-family: "Outfit", sans-serif;
+  --font2-family: "Young Serif", serif;
+
+  --page-content-max-width: 720px;
+}
+
+body {
+  height: auto;
+  background-color: var(--Eggshell);
+  font-family: var(--font1-family);
+  color: var(--WengeBrown);
+  line-height: 1.6;
+}
+
+/* Styles pour le bouton de retour à l'accueil */
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    background-color: #9a3737d4;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.home-button:hover,
+.home-button:focus {
+    background-color: rgba(103, 37, 37, 0.83);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.home-button:active {
+    transform: translateY(0px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.home-button svg {
+    width: 100%; /* L'SVG prendra la taille permise par le padding du bouton */
+    height: 100%;
+}
+
+.recipe-page-section {
+  margin: 40px auto;
+  display: grid;
+  place-items: center;
+  padding: 0 20px;
+}
+
+.recipe-page-content-container {
+  max-width: var(--page-content-max-width); 
+  width: 100%;
+  background-color: var(--White);
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.recipe-page-content-container > img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 25px;
+  display: block;
+  height: auto;
+}
+
+.recipe-page-content-container h1 {
+  font-family: var(--font2-family);
+  font-weight: 400;
+  font-size: 2.5em;
+  color: var(--DarkCharcoal);
+  margin-bottom: 0.5em;
+}
+
+.recipe-page-content-container p { /* Paragraphe de description */
+  color: var(--WengeBrown);
+  font-family: var(--font1-family);
+  margin-bottom: 1.5em;
+}
+
+/* Wrapper pour Préparation et Ustensiles */
+.preparation-and-utensils-wrapper {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    margin-bottom: 15px;
+}
+
+.preparation-container, .utensils-container {
+  background-color: var(--RoseWhite);
+  padding: 20px;
+  border-radius: 8px;
+  font-family: var(--font1-family);
+  flex: 1; 
+  min-width: 280px; 
+  border: 1px solid var(--LightGrey); /* Bordure fine comme sur l'image de référence */
+}
+
+.preparation-container h3, .utensils-container h3 {
+  color: var(--DarkRaspberry);
+  font-family: var(--font2-family);
+  font-size: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+.preparation-list, .utensils-list {
+  padding-left: 20px;
+  color: var(--WengeBrown);
+  list-style-type: disc;
+  /* Enlever un éventuel padding-top si présent, ou le réduire */
+  padding-top: 0; /* Assurer qu'il n'y a pas de padding en haut de la liste */
+}
+
+.preparation-list > li, .utensils-list > li {
+  margin-left: 5px; 
+}
+.preparation-list li > span:first-child,
+.utensils-list li > span:first-child {
+  font-weight: 600;
+}
+.preparation-list li > span:first-child {
+   padding-right: 5px;
+}
+
+
+h2 { /* Titres de section comme Ingrédients, Instructions */
+  font-family: var(--font2-family);
+  font-weight: 400;
+  color: var(--Nutmeg);
+  font-size: 1.8em;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.ingredients-list {
+  font-family: var(--font1-family);
+  color: var(--WengeBrown);
+  margin-bottom: 20px;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.ingredients-list > li {
+  padding-left: 25px;
+  position: relative;
+}
+.ingredients-list > li:last-child {
+    border-bottom: none;
+}
+
+.ingredients-list > li::before {
+    content: "•";
+    color: var(--Nutmeg);
+    font-weight: bold;
+    display: inline-block;
+    position: absolute;
+    left: 5px;
+    font-size: 1.2em;
+    /* top: 0.15em; */
+}
+
+.separation-line {
+  display: block;
+  border-top: 1px solid var(--LightGrey);
+  margin: 8px 0;
+}
+
+.instruction-list {
+  padding-left: 0;
+  font-family: var(--font1-family);
+  list-style-type: none;
+  counter-reset: instruction-counter;
+}
+
+.instruction-list > li {
+  padding: 4px 0 4px 35px;
+  position: relative;
+  color: var(--WengeBrown);
+}
+
+.instruction-list > li::before {
+  counter-increment: instruction-counter;
+  content: counter(instruction-counter) ".";
+  color: var(--Nutmeg);
+  font-weight: 600;
+  font-family: var(--font1-family);
+  position: absolute;
+  left: 5px;
+  top: 4.5px;
+}
+
+/* Styles pour mobile, basés sur le fichier original */
+@media screen and (max-width: 700px) {
+  .recipe-page-section {
+    margin: 0;
+    padding: 0;
+  }
+
+  .recipe-page-content-container {
+    width: 100%;
+    border-radius: 0;
+    padding: 20px;
+  }
+
+  .recipe-page-content-container > img {
+    border-radius: 0;
+    margin: -20px -20px 20px -20px;
+    width: calc(100% + 40px);
+    max-width: calc(100% + 40px);
+  }
+
+  .recipe-page-content-container h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.6em;
+  }
+  .preparation-container h3, .utensils-container h3 {
+    font-size: 1.2em;
+  }
+  .preparation-and-utensils-wrapper {
+    flex-direction: column; /* Toujours en colonne sur mobile */
+  }
+}

@@ -7,22 +7,22 @@ from weasyprint import HTML as WeasyHTML, CSS as WeasyCSS
 from weasyprint.text.fonts import FontConfiguration
 
 # ... (le reste de vos configurations reste identique) ...
-PROJECT_ROOT = Path(__file__).resolve().parent
+SRC_ROOT = Path(__file__).resolve().parent
 
-RECIPES_DATA_DIR = PROJECT_ROOT / "recipe_data"
+RECIPES_DATA_DIR = SRC_ROOT / "recipe_data"
 MASTER_JSON_FILENAME = "all_recipes.json"
-SOURCE_RECIPE_IMAGES_DIR = PROJECT_ROOT / "source_recipe_images"
-TEMPLATES_DIR = PROJECT_ROOT / "templates"
+SOURCE_RECIPE_IMAGES_DIR = SRC_ROOT / "source_recipe_images"
+TEMPLATES_DIR = SRC_ROOT / "templates"
 TEMPLATE_FILENAME = "base_recipe.html"
 
-OUTPUT_DIR = PROJECT_ROOT / "website"
+OUTPUT_DIR = SRC_ROOT.parent / "website"
 OUTPUT_RECIPE_IMAGES_DIR = OUTPUT_DIR / "recipe_images"
 OUTPUT_CSS_DIR = OUTPUT_DIR / "css"
 OUTPUT_FONTS_DIR = OUTPUT_DIR / "fonts"
 OUTPUT_PDF_DIR = OUTPUT_DIR / "pdf_recipes"  # <-- NOUVEAU: Dossier pour les PDF
 
-SOURCE_STATIC_CSS_DIR = PROJECT_ROOT / "static" / "css"
-SOURCE_STATIC_FONTS_DIR = PROJECT_ROOT / "static" / "fonts"
+SOURCE_STATIC_CSS_DIR = SRC_ROOT / "static" / "css"
+SOURCE_STATIC_FONTS_DIR = SRC_ROOT / "static" / "fonts"
 
 
 def generate_homepage(all_recipes_data, env):
