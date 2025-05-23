@@ -32,30 +32,39 @@ html, body { /* Ciblez html aussi pour plus de robustesse */
 }
 
 .recipe-page-content-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important; /* Temporairement sans padding pour simplifier */
+  box-sizing: border-box !important; /* Essentiel */
+  overflow: hidden !important; /* Pour voir si ça cache juste, ou si ça change le zoom */
+
   border-radius: 0 !important;
   box-shadow: none !important;
-  padding: 0 !important;
-  max-width: 100% !important;
   background-color: var(--White) !important;
+  height: auto !important; /* Important pour que le conteneur s'adapte au contenu */
+  min-height: 0 !important;
+
+
+  /*border-radius: 0 !important;*/
+  /*box-shadow: none !important;*/
+  /*padding: 0 !important;*/
+  /*max-width: 100% !important;*/
+  /*background-color: var(--White) !important;*/
 }
 
-/* TODO: Fix le pb d'image, actuellement la width est fixée, mais si on la met
+/* TODO: Fix le pb d'image, actuellement la height est fixée, mais si on la met
 en auto ca marche pas : l'image overflow a droite.
 Faudrait revoir un peu tout le css pour comprendre mais là flemme. */
 .recipe-page-content-container > img {
-  /*!* Puis réappliquer UNIQUEMENT ce que vous voulez pour l'impression *!*/
-  /*max-width: 10cm !important; !* COMMENCEZ PAR UNE VALEUR ABSOLUE RAISONNABLE pour le test *!*/
-  /*!* Ex: 10cm, 12cm, ou 60% si vous êtes sûr que le parent est bon *!*/
-  /*width: 5cm !important; !* Devrait être gouverné par max-width *!*/
-  /*margin: 2em auto 1em auto !important; !* Centre (0 haut, auto G/D, 1em bas) *!*/
-  /*page-break-inside: avoid; !* Évite la coupure d'image *!*/
-  max-width: 100% !important; /* Devrait être la base */
-  height: auto !important;   /* Pour garder les proportions */
-  /* width: auto !important; */ /* N'est généralement pas nécessaire si max-width et height: auto sont là */
-  display: block !important; /* Pour que les marges auto fonctionnent pour le centrage */
-  margin: 1em auto !important; /* Centre l'image horizontalement et ajoute des marges verticales */
-  page-break-inside: avoid;
-  box-sizing: border-box !important; /* Au cas où des bordures/paddings seraient ajoutés par erreur */
+  max-width: 100% !important; /* L'image ne doit pas dépasser la largeur de son parent */
+  width: auto !important;
+  height: auto !important;
+  max-height: 8cm !important;
+  display: block !important; /* Nécessaire pour que margin: auto fonctionne bien */
+  margin: 1em auto !important;
+  border-radius: 0 !important; /* Pas de coins arrondis pour l'impression */
+  page-break-inside: avoid !important; /* Évite que l'image soit coupée sur deux pages */
+  box-sizing: border-box !important; /* Bonne pratique */
 }
 
 .preparation-and-utensils-wrapper {
@@ -64,15 +73,13 @@ Faudrait revoir un peu tout le css pour comprendre mais là flemme. */
   margin-bottom: 1em !important; /* Ajout important pour l'espacement */
 }
 
+/* TODO: régler l'overflow sur la droite de ustensiles */
 .preparation-container, .utensils-container {
   background-color: var(--RoseWhite) !important;
   border: 1px solid var(--LightGrey) !important; /* Garder une bordure légère */
   padding: 10pt !important;
   border-radius: 8px !important;
   flex: 1 !important;
-  /* Si flex:1 ne suffit pas, décommentez et ajustez les largeurs : */
-  /* width: calc(50% - 5mm) !important; */
-  /* min-width: 0 !important; */ /* Peut aider flexbox dans certains cas */
 }
 
 .preparation-container h3, .utensils-container h3 {
