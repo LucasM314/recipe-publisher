@@ -1,10 +1,19 @@
-/* static/css/style_homepage.css */
+/* static/css/style_index.css */
+
+html {
+  height: 100%;
+}
 
 body {
   font-family: 'Lato', sans-serif;
   margin: 0;
   background-color: #f9f9f9;
   color: #333;
+
+  /* Needed for sticky footer */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .site-header {
@@ -29,8 +38,11 @@ body {
 
 .homepage-content {
   max-width: 1200px;
+  min-width: 80%;
   margin: 30px auto;
   padding: 0 20px;
+
+  flex-grow: 1;
 }
 
 .recipe-gallery h2 {
@@ -100,7 +112,6 @@ body {
 
 .recipe-card-content {
   padding: 15px;
-  flex-grow: 1; /* Allows content to push footer down if card heights vary */
   display: flex;
   flex-direction: column;
 }
@@ -122,27 +133,26 @@ body {
 
 .recipe-card-type {
   display: inline-block;
-  background-color: #e8f0fe; /* Light blue, example */
+  background-color: #e8f0fe;
   color: #4a7c59;
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.8em;
   font-weight: bold;
-  align-self: flex-start; /* Align to start of flex container */
+  align-self: flex-start;
   margin-top: auto; /* Push to bottom if description is short */
 }
 
 /* Example type-specific styling for card badges */
 .recipe-card.type-dessert .recipe-card-type {
-  background-color: #ffe8f0; /* Light pink */
-  color: #d2691e; /* Chocolate */
+  background-color: #ffe8f0;
+  color: #d2691e;
 }
 
 .recipe-card.type-plat .recipe-card-type {
-  background-color: #f0f8ff; /* Alice blue */
-  color: #8b4513; /* Saddle brown */
+  background-color: #f0f8ff;
+  color: #8b4513;
 }
-
 
 .no-recipes-message {
   text-align: center;
