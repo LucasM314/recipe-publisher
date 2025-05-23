@@ -1,121 +1,146 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{ recipe.name }} | Recette</title>
     <!-- Le favicon peut être ajouté plus tard si vous en avez un -->
     <!-- <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png"/> -->
-    
+
     <!-- CSS principal, qui contiendra les styles du fichier style.css fourni -->
-    <link rel="stylesheet" href="css/style_base.css" /> 
-    
+    <link rel="stylesheet" href="css/style_base.css"/>
+
     <!-- CSS spécifiques au type de recette (optionnel, peut être fusionné ou adapté) -->
     {% if recipe.type and recipe.type != 'default' %}
-    <link rel="stylesheet" href="css/style_{{ recipe.type }}.css">
+        <link rel="stylesheet" href="css/style_{{ recipe.type }}.css">
     {% endif %}
 
     <!-- CSS pour l'impression -->
     <link rel="stylesheet" href="css/print.css" media="print">
 </head>
 <body>
-    <a href="index.html" class="home-button" aria-label="Retour à l'accueil">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+<div class="page-actions-fixed">
+    {# Boutton retour à l'accueil '#}
+    <a href="index.html" class="action-button home-button" aria-label="Retour à l'accueil">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+            <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </svg>
     </a>
+    {# Boutton voir la version PDF #}
+    {% if recipe.pdf_path %}
+        <a href="{{ recipe.pdf_path }}" class="action-button pdf-button" aria-label="Voir la version PDF"
+           target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/>
+                <rect x="6" y="14" width="12" height="8" rx="1"/>
+            </svg>
+        </a>
+    {% endif %}
+</div>
 
-    <main>
-        <section class="recipe-page-section">
-            <div class="recipe-page-content-container">
-                <h1>{{ recipe.name }}</h1>
-                {% if recipe.description %}
+<main>
+    <section class="recipe-page-section">
+        <div class="recipe-page-content-container">
+            <h1>{{ recipe.name }}</h1>
+            {% if recipe.description %}
                 <p>{{ recipe.description }}</p>
-                {% endif %}
+            {% endif %}
 
-                <div class="preparation-and-utensils-wrapper">
-                    {# Section Durées (Preparation time) #}
-                    {% if recipe.durations %}
-                        {% set has_any_duration = false %}
-                        {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}{% set has_any_duration = true %}{% endif %}
-                        {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}{% set has_any_duration = true %}{% endif %}
-                        {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}{% set has_any_duration = true %}{% endif %}
-                        {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}{% set has_any_duration = true %}{% endif %}
-                        
-                        {% if has_any_duration %}
+            <div class="preparation-and-utensils-wrapper">
+                {# Section Durées (Preparation time) #}
+                {% if recipe.durations %}
+                    {% set has_any_duration = false %}
+                    {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}
+                        {% set has_any_duration = true %}{% endif %}
+                    {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}
+                        {% set has_any_duration = true %}{% endif %}
+                    {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}
+                        {% set has_any_duration = true %}{% endif %}
+                    {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}
+                        {% set has_any_duration = true %}{% endif %}
+
+                    {% if has_any_duration %}
                         <div class="preparation-container">
                             <h3>Temps de préparation</h3>
                             <ul class="preparation-list">
                                 {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}
-                                <li><span>Total :</span> {{ recipe.durations.total }}</li>
+                                    <li><span>Total :</span> {{ recipe.durations.total }}</li>
                                 {% endif %}
                                 {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}
-                                <li><span>Préparation :</span> {{ recipe.durations.preparation }}</li>
+                                    <li><span>Préparation :</span> {{ recipe.durations.preparation }}</li>
                                 {% endif %}
                                 {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}
-                                <li><span>Cuisson :</span> {{ recipe.durations.cooking }}</li>
+                                    <li><span>Cuisson :</span> {{ recipe.durations.cooking }}</li>
                                 {% endif %}
                                 {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}
-                                <li><span>Repos :</span> {{ recipe.durations.rest }}</li>
+                                    <li><span>Repos :</span> {{ recipe.durations.rest }}</li>
                                 {% endif %}
                             </ul>
                         </div>
-                        {% endif %}
                     {% endif %}
+                {% endif %}
 
-                    {# Section Ustensiles #}
-                    {% if recipe.utensils and recipe.utensils|length > 0 %}
-                    <div class="utensils-container preparation-container"> {# Réutilisation de la classe pour un style similaire #}
+                {# Section Ustensiles #}
+                {% if recipe.utensils and recipe.utensils|length > 0 %}
+                    <div class="utensils-container preparation-container">
+                        {# Réutilisation de la classe pour un style similaire #}
                         <h3>Ustensiles</h3>
                         <ul class="utensils-list preparation-list"> {# Réutilisation de la classe #}
                             {% for utensil in recipe.utensils %}
-                            <li><span>{{ utensil }}</span></li> {# Les ustensiles sont souvent juste le nom #}
+                                <li><span>{{ utensil }}</span></li> {# Les ustensiles sont souvent juste le nom #}
                             {% endfor %}
                         </ul>
                     </div>
-                    {% endif %}
-                </div>
+                {% endif %}
+            </div>
 
 
-                {% if recipe.ingredients and recipe.ingredients.list and recipe.ingredients.list|length > 0 %}
+            {% if recipe.ingredients and recipe.ingredients.list and recipe.ingredients.list|length > 0 %}
                 <h2>Ingrédients</h2>
                 <ul class="ingredients-list">
                     {% for ingredient_item in recipe.ingredients.list %}
-                    <li><span>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</span></li>
-                    {# Si vous voulez la quantité en gras, il faudra structurer différemment le JSON ou le CSS #}
-                    {# Exemple: <li><strong>{{ ingredient_item.quantity }}</strong> {{ ingredient_item.name }}</li> #}
+                        <li><span>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</span></li>
+                        {# Si vous voulez la quantité en gras, il faudra structurer différemment le JSON ou le CSS #}
+                        {# Exemple: <li><strong>{{ ingredient_item.quantity }}</strong> {{ ingredient_item.name }}</li> #}
                     {% endfor %}
                 </ul>
                 <span class="separation-line"></span> {# Ligne de séparation #}
-                {% endif %}
+            {% endif %}
 
 
-                {% if recipe.instructions and recipe.instructions|length > 0 %}
+            {% if recipe.instructions and recipe.instructions|length > 0 %}
                 <h2>Instructions</h2>
                 <ol class="instruction-list">
                     {% for step in recipe.instructions %}
-                    <li>
-                        {# Le style original avait un titre d'étape puis le texte. #}
-                        {# Si vos instructions sont juste du texte, c'est plus simple. #}
-                        {# Si vous avez une structure "TitreEtape: TexteEtape", il faudra adapter le JSON et ici. #}
-                        <span>{{ step }}</span> {# Affichage direct de l'étape #}
-                    </li>
+                        <li>
+                            {# Le style original avait un titre d'étape puis le texte. #}
+                            {# Si vos instructions sont juste du texte, c'est plus simple. #}
+                            {# Si vous avez une structure "TitreEtape: TexteEtape", il faudra adapter le JSON et ici. #}
+                            <span>{{ step }}</span> {# Affichage direct de l'étape #}
+                        </li>
                     {% endfor %}
                 </ol>
                 {# Pas de section Nutrition demandée #}
                 <!-- <span class="separation-line"></span> --> {# Ligne de séparation si besoin avant le footer #}
-                {% endif %}
+            {% endif %}
 
-                {% if recipe.image_filename %}
-                <img src="recipe_images/{{ recipe.image_filename }}" alt="Illustration de {{ recipe.name }}" />
-                {% else %}
+            {% if recipe.image_filename %}
+                <img src="recipe_images/{{ recipe.image_filename }}" alt="Illustration de {{ recipe.name }}"/>
+            {% else %}
                 <!-- Optionnel: une image placeholder si aucune image n'est fournie -->
                 <!-- <img src="placeholder.jpg" alt="Pas d'image disponible" /> -->
-                {% endif %}
-            </div>
-        </section>
-    </main>
-     <!-- Footer simple, le design original n'en a pas dans le contenu principal -->
-    <footer class="attribution" style="text-align:center; padding: 20px; font-family: var(--font1); font-size:0.8em; color: var(--WengeBrown);">
-        Recette générée avec ❤️
-    </footer>
+            {% endif %}
+        </div>
+    </section>
+</main>
+<!-- Footer simple, le design original n'en a pas dans le contenu principal -->
+<footer class="attribution"
+        style="text-align:center; padding: 20px; font-family: var(--font1); font-size:0.8em; color: var(--WengeBrown);">
+    Recette générée avec ❤️
+</footer>
 </body>
 </html>

@@ -5,21 +5,23 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML as WeasyHTML, CSS as WeasyCSS
 from weasyprint.text.fonts import FontConfiguration
+import traceback
 
-# ... (le reste de vos configurations reste identique) ...
+# Constants for paths
 SRC_ROOT = Path(__file__).resolve().parent
-
 RECIPES_DATA_DIR = SRC_ROOT / "recipe_data"
 MASTER_JSON_FILENAME = "all_recipes.json"
 SOURCE_RECIPE_IMAGES_DIR = SRC_ROOT / "source_recipe_images"
 TEMPLATES_DIR = SRC_ROOT / "templates"
-TEMPLATE_FILENAME = "base_recipe.html"
+TEMPLATE_RECIPE_PAGE_FILENAME = "base_recipe.html"
+TEMPLATE_HOMEPAGE_FILENAME = "index.html"
 
+# Output directories (relative to parent of SRC_ROOT for a 'website' folder sibling to src)
 OUTPUT_DIR = SRC_ROOT.parent / "website"
 OUTPUT_RECIPE_IMAGES_DIR = OUTPUT_DIR / "recipe_images"
 OUTPUT_CSS_DIR = OUTPUT_DIR / "css"
 OUTPUT_FONTS_DIR = OUTPUT_DIR / "fonts"
-OUTPUT_PDF_DIR = OUTPUT_DIR / "pdf_recipes"  # <-- NOUVEAU: Dossier pour les PDF
+OUTPUT_PDF_DIR = OUTPUT_DIR / "pdf_recipes"
 
 SOURCE_STATIC_CSS_DIR = SRC_ROOT / "static" / "css"
 SOURCE_STATIC_FONTS_DIR = SRC_ROOT / "static" / "fonts"
@@ -27,41 +29,37 @@ SOURCE_STATIC_FONTS_DIR = SRC_ROOT / "static" / "fonts"
 
 def generate_homepage(all_recipes_data, env):
     print("\nGenerating homepage...")
-    homepage_template = env.get_template("index.html")  # New template name
+    try:
+        homepage_template = env.get_template(TEMPLATE_HOMEPAGE_FILENAME)
+    except Exception as e:
+        print(f"  Error loading homepage template '{TEMPLATE_HOMEPAGE_FILENAME}': {e}")
+        return
 
     recipes_summary_list = []
-    for recipe_data in all_recipes_data:
+    for recipe_data in all_recipes_data:  # Renamed to avoid conflict
         if not isinstance(recipe_data, dict):
-            continue  # Skip invalid entries
+            continue
 
-        # Ensure html_filename is generated using the same logic as individual pages
-        # This assumes individual pages are in OUTPUT_DIR root.
-        # If they are in a subfolder, adjust here.
-        html_filename = generate_safe_filename(
-            recipe_data.get("name", "untitled"), extension="html"
-        )
+        recipe_name = recipe_data.get("name", "untitled")
+        html_filename = generate_safe_filename(recipe_name, extension="html")
 
-        # Construct relative image path for the homepage
-        # Assumes images are in OUTPUT_RECIPE_IMAGES_DIR relative to OUTPUT_DIR
         image_path = None
         if recipe_data.get("image_filename"):
-            # Path relative to the index.html location (which is OUTPUT_DIR)
             image_path = (
                 f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{recipe_data['image_filename']}"
             )
 
         summary = {
-            "name": recipe_data.get("name", "Titre inconnu"),
-            "html_filename": html_filename,  # e.g., "ma_recette.html"
-            "image_path": image_path,  # e.g., "recipe_images/mon_image.jpg"
+            "name": recipe_name,
+            "html_filename": html_filename,
+            "image_path": image_path,
             "description": recipe_data.get("description", ""),
             "type": recipe_data.get("type", "default"),
         }
         recipes_summary_list.append(summary)
 
-    # Data for the homepage template
     homepage_context = {
-        "site_title": "Les recettes de mamounette",  # Or get from a config file
+        "site_title": "Les recettes de mamounette",
         "site_tagline": "Joyeuse fête des mères !",
         "recipes_summary_list": recipes_summary_list,
         "current_year": datetime.now().year,
@@ -69,23 +67,22 @@ def generate_homepage(all_recipes_data, env):
 
     try:
         homepage_html_content = homepage_template.render(homepage_context)
-        output_homepage_path = OUTPUT_DIR / "index.html"
+        output_homepage_path = OUTPUT_DIR / "index.html"  # Output is always index.html
         output_homepage_path.write_text(homepage_html_content, encoding="utf-8")
         print(f"  Homepage générée : {output_homepage_path}")
     except Exception as e:
         print(f"  Erreur lors de la génération de la page d'accueil : {e}")
-        import traceback
-
         traceback.print_exc()
 
 
-def generate_safe_filename(
-    title_fr: str, extension: str = "html"
-) -> str:  # Ajout d'un paramètre extension
+def generate_safe_filename(title_fr: str, extension: str = "html") -> str:
     name = title_fr.lower()
     name = name.replace(" ", "_")
+    # Allow accented characters common in French, and underscore, alphanumeric
     name = "".join(c for c in name if c.isalnum() or c == "_" or ord(c) > 127)
-    name = name[:70] if len(name) > 70 else (name if name else "untitled_recipe")
+    name = name[:70]  # Truncate if too long
+    if not name:  # Handle empty names after sanitization
+        name = "untitled_recipe"
     return f"{name}.{extension}"
 
 
@@ -97,64 +94,52 @@ def needs_de_separator(quantity_str):
     Retourne True si la quantité contient une unité textuelle (ex: "200g", "1 cuillère").
     """
     s = str(quantity_str).strip()
-    if not s:  # Si la quantité est vide
+    if not s:
         return False
     try:
-        # Essayer de convertir en nombre. Si ça réussit, c'est une quantité "pure".
         float(s.replace(",", "."))  # Gérer la virgule décimale française
-        # Si la conversion réussit, cela signifie que la chaîne est un nombre
-        # (ex: "3", "100", "0.5"). Dans ce cas, on ne veut PAS de "de".
         return False
     except ValueError:
-        # Si la conversion échoue, cela signifie que la chaîne contient du texte
-        # (ex: "200g", "1 cuillère", "une pincée", "1-2"). Dans ce cas, on VEUT "de".
         return True
 
 
 def copy_static_assets():
-    # ... (fonction copy_static_assets reste identique) ...
+    print("\nCopying static assets...")
+    # CSS
     if OUTPUT_CSS_DIR.exists():
         shutil.rmtree(OUTPUT_CSS_DIR)
     OUTPUT_CSS_DIR.mkdir(parents=True, exist_ok=True)
     if SOURCE_STATIC_CSS_DIR.exists() and SOURCE_STATIC_CSS_DIR.is_dir():
-        for item_path in SOURCE_STATIC_CSS_DIR.iterdir():
-            if item_path.is_file() and item_path.suffix == ".css":
-                destination_path = OUTPUT_CSS_DIR / item_path.name
-                shutil.copy2(item_path, destination_path)
+        shutil.copytree(SOURCE_STATIC_CSS_DIR, OUTPUT_CSS_DIR, dirs_exist_ok=True)
+        print(f"  CSS files copied to: {OUTPUT_CSS_DIR}")
     else:
         print(f"Warning: Source CSS directory '{SOURCE_STATIC_CSS_DIR}' not found.")
 
+    # Fonts
     if OUTPUT_FONTS_DIR.exists():
         shutil.rmtree(OUTPUT_FONTS_DIR)
+    OUTPUT_FONTS_DIR.mkdir(
+        parents=True, exist_ok=True
+    )  # Ensure it's created before copytree
     if SOURCE_STATIC_FONTS_DIR.exists() and SOURCE_STATIC_FONTS_DIR.is_dir():
-        shutil.copytree(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR)
+        shutil.copytree(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, dirs_exist_ok=True)
         print(f"  Fonts copied to: {OUTPUT_FONTS_DIR}")
     else:
         print(f"Warning: Source Fonts directory '{SOURCE_STATIC_FONTS_DIR}' not found.")
 
 
 def main():
+    # Create output directories
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_RECIPE_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PDF_DIR.mkdir(
-        parents=True, exist_ok=True
-    )  # <-- NOUVEAU: Créer le dossier PDF
+    OUTPUT_PDF_DIR.mkdir(parents=True, exist_ok=True)
 
     copy_static_assets()
 
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
-    template = env.get_template(TEMPLATE_FILENAME)
+    recipe_page_template = env.get_template(TEMPLATE_RECIPE_PAGE_FILENAME)
 
-    # Configuration des polices pour WeasyPrint (pour qu'il trouve vos polices locales)
-    font_config = FontConfiguration()  # Crée une config par défaut
-    # Si vos @font-face dans style_base.css sont bien relatifs et pointent vers les polices
-    # copiées dans output/fonts, WeasyPrint devrait les trouver.
-    # Sinon, vous pouvez explicitement ajouter des règles ici :
-    # css_for_fonts = """
-    # @font-face {font-family: 'Outfit'; src: url('fonts/outfit/Outfit-VariableFont_wght.ttf');}
-    # @font-face {font-family: 'Young Serif'; src: url('fonts/young-serif/YoungSerif-Regular.ttf');}
-    # """
-    # Cette étape n'est souvent pas nécessaire si les @font-face sont dans le CSS principal.
+    font_config = FontConfiguration()
 
     master_json_path = RECIPES_DATA_DIR / MASTER_JSON_FILENAME
     try:
@@ -162,7 +147,6 @@ def main():
     except FileNotFoundError:
         print(f"Error: Master JSON file '{master_json_path}' not found.")
         return
-    # ... (reste de la gestion des erreurs JSON identique) ...
     except json.JSONDecodeError:
         print(f"Error: Invalid JSON in '{master_json_path}'. Please check syntax.")
         return
@@ -178,153 +162,141 @@ def main():
         return
 
     print(
-        f"Found {len(all_recipes_data)} recipe(s) in '{master_json_path}'. Processing..."
+        f"\nFound {len(all_recipes_data)} recipe(s) in '{master_json_path}'. Processing individual recipes..."
     )
 
-    # Charger les CSS une seule fois pour les utiliser avec WeasyPrint
-    # WeasyPrint a besoin des chemins absolus ou des URL pour les CSS externes
-    # ou alors on lui passe le contenu.
-    # Pour les chemins relatifs dans le HTML, WeasyPrint les résout par rapport au base_url.
+    # Prepare list of stylesheets for WeasyPrint (loaded once)
+    weasy_stylesheets = []
+    main_css_path = OUTPUT_CSS_DIR / "style_base.css"
+    print_css_path = OUTPUT_CSS_DIR / "print.css"
 
-    # Lister tous les fichiers CSS qui seront utilisés (pour WeasyPrint)
-    # On suppose que style_base.css contient déjà les @font-face
-    main_css_file = OUTPUT_CSS_DIR / "style_base.css"
-    print_css_file = OUTPUT_CSS_DIR / "print.css"
-
-    stylesheets = []
-    if main_css_file.exists():
-        stylesheets.append(WeasyCSS(filename=main_css_file, font_config=font_config))
-    if print_css_file.exists():
-        stylesheets.append(
+    if main_css_path.exists():
+        weasy_stylesheets.append(
+            WeasyCSS(filename=main_css_path, font_config=font_config)
+        )
+    else:
+        print(f"Warning: Main CSS file not found at {main_css_path}")
+    if print_css_path.exists():
+        weasy_stylesheets.append(
             WeasyCSS(
-                filename=print_css_file, font_config=font_config, media_type="print"
+                filename=print_css_path, font_config=font_config, media_type="print"
             )
         )
+    else:
+        print(f"Warning: Print CSS file not found at {print_css_path}")
 
+    # Process each recipe
     for i, recipe_data in enumerate(all_recipes_data):
         if not isinstance(recipe_data, dict):
             print(f"  Skipping item {i + 1}: not a valid recipe object.")
             continue
+
         recipe_name_fr = recipe_data.get("name", f"untitled_recipe_{i + 1}")
-        recipe_data["name"] = recipe_name_fr  # Assurer la présence pour le template
+        print(f"\nProcessing recipe: {recipe_name_fr}")
 
-        if "type" not in recipe_data or not recipe_data["type"]:
-            recipe_data["type"] = "default"
-
-        if "description" not in recipe_data:
-            recipe_data["description"] = "Une délicieuse recette à découvrir."
+        # Ensure default values and apply transformations
+        recipe_data["name"] = recipe_name_fr
+        recipe_data.setdefault("type", "default")
+        recipe_data.setdefault("description", "Une délicieuse recette à découvrir.")
 
         if "ingredients" in recipe_data and "list" in recipe_data["ingredients"]:
             for ingredient_item in recipe_data["ingredients"]["list"]:
-                # Get the original quantity, ensure it's a string, and strip whitespace
-                original_quantity = ingredient_item.get(
-                    "quantity"
-                )  # Use your actual key name
-
-                if original_quantity is None:
-                    current_quantity_str = ""
-                # Handle if quantity is accidentally an int/float from JSON
-                elif isinstance(original_quantity, (int, float)):
-                    current_quantity_str = str(original_quantity)
-                else:
+                original_quantity = ingredient_item.get("quantity")
+                current_quantity_str = ""
+                if original_quantity is not None:
                     current_quantity_str = str(original_quantity).strip()
 
-                # Now, modify the 'quantity' field for display
-                if current_quantity_str and needs_de_separator(current_quantity_str):
-                    # Append " de" to the quantity string
-                    ingredient_item["quantity"] = current_quantity_str + " de"
-                else:
-                    # Otherwise, just use the (cleaned) original string
-                    ingredient_item["quantity"] = current_quantity_str
+                needs_de = needs_de_separator(current_quantity_str)
+                ingredient_item["quantity"] = current_quantity_str + " de" * needs_de
 
-        # Copie des images (inchangé)
+        # Image copying
         image_filename_val = recipe_data.get("image_filename")
-        if image_filename_val:
+        if image_filename_val and not image_filename_val.startswith(
+            ("http://", "https://")
+        ):  # Process only local images
             source_image_path = SOURCE_RECIPE_IMAGES_DIR / image_filename_val
             dest_image_path = OUTPUT_RECIPE_IMAGES_DIR / image_filename_val
             if source_image_path.exists() and source_image_path.is_file():
                 try:
                     shutil.copy2(source_image_path, dest_image_path)
+                    # print(f"    Image '{image_filename_val}' copied to '{dest_image_path}'")
                 except Exception as e:
                     print(
                         f"    Error copying image '{source_image_path}' to '{dest_image_path}': {e}"
                     )
-                    recipe_data["image_filename"] = None
+                    recipe_data["image_filename"] = None  # Nullify if copy failed
             else:
                 print(
-                    f"    Warning: Image '{source_image_path}' for recipe '{recipe_name_fr}' not found."
+                    f"    Warning: Local image '{source_image_path}' for recipe '{recipe_name_fr}' not found."
                 )
-                recipe_data["image_filename"] = None
+                recipe_data["image_filename"] = None  # Nullify if not found
+        elif image_filename_val and image_filename_val.startswith(
+            ("http://", "https://")
+        ):
+            # print(f"    Image for '{recipe_name_fr}' is a URL: {image_filename_val}")
+            pass  # Keep the URL as is
 
-        # Génération HTML (inchangé)
-        try:
-            html_content = template.render(recipe=recipe_data)
-        except Exception as e:
-            print(f"  Error rendering template for '{recipe_name_fr}': {e}")
-            continue
-
-        # Sauvegarde du fichier HTML (inchangé)
         output_html_filename_str = generate_safe_filename(
             recipe_name_fr, extension="html"
         )
-        output_html_path = OUTPUT_DIR / output_html_filename_str
-        try:
-            output_html_path.write_text(html_content, encoding="utf-8")
-            print(f"  Page HTML générée : {output_html_path}")
-        except Exception as e:
-            print(f"  Error writing HTML file '{output_html_path}': {e}")
-            continue  # On ne peut pas générer de PDF si le HTML a échoué
-
-        # --- NOUVEAU: Génération du PDF avec WeasyPrint ---
         output_pdf_filename_str = generate_safe_filename(
             recipe_name_fr, extension="pdf"
         )
-        output_pdf_path = OUTPUT_PDF_DIR / output_pdf_filename_str
+        # Chemin relatif depuis la page HTML (dans OUTPUT_DIR) vers le PDF (dans OUTPUT_PDF_DIR)
+        recipe_data["pdf_path"] = f"{OUTPUT_PDF_DIR.name}/{output_pdf_filename_str}"
 
+        # Context for rendering the individual recipe page
+        recipe_page_context = {
+            "recipe": recipe_data,
+            "site_title": "Les recettes de mamounette",  # Pass site title for consistency in <title>
+        }
+
+        # Generate HTML page
         try:
-            # WeasyPrint peut prendre le chemin du fichier HTML ou son contenu.
-            # Il est souvent plus simple de lui donner le chemin du fichier HTML généré
-            # car il pourra résoudre les chemins relatifs des images et CSS plus facilement.
-            # Le `base_url` est crucial pour que WeasyPrint trouve les assets (images, CSS)
-            # référencés avec des chemins relatifs dans le HTML.
-            # Puisque nos CSS et images sont dans des sous-dossiers de OUTPUT_DIR,
-            # et que nos HTML sont aussi dans OUTPUT_DIR, le base_url devrait être OUTPUT_DIR.
+            html_content = recipe_page_template.render(recipe_page_context)
+            output_html_path = OUTPUT_DIR / output_html_filename_str
+            output_html_path.write_text(html_content, encoding="utf-8")
+            print(
+                f"  HTML page generated: {output_html_path.relative_to(SRC_ROOT.parent)}"
+            )
+        except Exception as e:
+            print(f"  Error rendering HTML template for '{recipe_name_fr}': {e}")
+            traceback.print_exc()
+            continue
 
+        # Generate PDF page
+        try:
             html_for_pdf = WeasyHTML(
                 filename=output_html_path, base_url=str(OUTPUT_DIR.resolve())
             )
 
-            # On peut aussi passer les stylesheets directement. C'est plus robuste.
-            # Si les stylesheets sont passés ici, WeasyPrint n'essaiera pas de les charger depuis les balises <link>
-            # ce qui peut éviter des problèmes si les chemins dans <link> ne sont pas parfaits pour WeasyPrint.
-            # Cependant, il va quand même lire les <link> pour savoir quels media types s'appliquent si non spécifié ici.
-
-            # On récupère les CSS spécifiques au type de plat
-            specific_type_css_list = []
+            # Add recipe-type-specific CSS for PDF if it exists
+            current_stylesheets_for_pdf = list(weasy_stylesheets)
             if recipe_data["type"] != "default":
-                type_css_file = OUTPUT_CSS_DIR / f"style_{recipe_data['type']}.css"
-                if type_css_file.exists():
-                    specific_type_css_list.append(
-                        WeasyCSS(filename=type_css_file, font_config=font_config)
+                type_css_filename = f"style_{recipe_data['type']}.css"
+                type_css_path = OUTPUT_CSS_DIR / type_css_filename
+                if type_css_path.exists():
+                    current_stylesheets_for_pdf.append(
+                        WeasyCSS(filename=type_css_path, font_config=font_config)
                     )
 
+            output_pdf_path = OUTPUT_PDF_DIR / output_pdf_filename_str
             html_for_pdf.write_pdf(
-                output_pdf_path,
-                stylesheets=stylesheets
-                + specific_type_css_list,  # Concaténer les listes de CSS
+                output_pdf_path, stylesheets=current_stylesheets_for_pdf
             )
-            print(f"  Page PDF générée  : {output_pdf_path}")
+            print(
+                f"  PDF page generated : {output_pdf_path.relative_to(SRC_ROOT.parent)}"
+            )
         except Exception as e:
-            print(f"  Erreur lors de la génération du PDF pour '{recipe_name_fr}': {e}")
-            import traceback
+            print(f"  Error generating PDF for '{recipe_name_fr}': {e}")
+            traceback.print_exc()
 
-            traceback.print_exc()  # Imprime la trace complète de l'erreur WeasyPrint
-
-    if all_recipes_data: # Ensure there's data to process
+    # Generate homepage after all individual pages and PDFs are processed
+    if all_recipes_data:
         generate_homepage(all_recipes_data, env)
 
     print(
-        f"\nProcessing complete. Check the '{OUTPUT_DIR}' and '{OUTPUT_PDF_DIR}' directories."
+        f"\nProcessing complete. Output in: '{OUTPUT_DIR.relative_to(SRC_ROOT.parent)}'"
     )
 
 
