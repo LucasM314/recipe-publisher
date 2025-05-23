@@ -94,38 +94,5 @@
       "Ajouter la moitié de lait restant, le beurre fondu, le sucre vanillé",
       "Laisse reposer (facultatif). Si la pâte est trop épaisse, ajouter un peu de lait."
     ]
-},
-  {
-    "name": "Nom de la recette",
-    "type": "dessert",
-    "description": "Description de la recette.",
-    "image_filename": "https://example.com/path/to/image.jpg",
-    "durations": {
-      "total": "5",
-      "preparation": "9",
-      "cooking": "",
-      "rest": ""
-    },
-    "utensils": [
-      "Nom de l'ustensile 1",
-      "Nom de l'ustensile 2"
-    ],
-    "ingredients": {
-      "serves": "5 personnes",
-      "list": [
-        {
-          "name": "Nom de l'ingrédient 1",
-          "quantity": "Quantité et unité"
-        },
-        {
-          "name": "Nom de l'ingrédient 2",
-          "quantity": "Quantité et unité"
-        }
-      ]
-    },
-    "instructions": [
-      "Première étape de la préparation.",
-      "Deuxième étape de la préparation."
-    ]
   }
 ]
