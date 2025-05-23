@@ -11,33 +11,33 @@
 </head>
 <body>
 
-    <header class="site-header">
-        <h1>{{ site_title | default("Recipe Publisher") }}</h1>
-        <p class="tagline">{{ site_tagline | default("Découvrez nos meilleures recettes, faciles à préparer !") }}</p>
-        <!-- You could add a navigation menu here if you have other pages -->
-        <!-- <nav>
-            <a href="#">Accueil</a>
-            <a href="#">À Propos</a>
-        </nav> -->
-    </header>
+<header class="site-header">
+    <h1>{{ site_title | default("Recipe Publisher") }}</h1>
+    <p class="tagline">{{ site_tagline | default("Découvrez nos meilleures recettes, faciles à préparer !") }}</p>
+    <!-- You could add a navigation menu here if you have other pages -->
+    <!-- <nav>
+        <a href="#">Accueil</a>
+        <a href="#">À Propos</a>
+    </nav> -->
+</header>
 
-    <main class="homepage-content">
-        <section class="recipe-gallery">
-            <h2>Toutes les recettes</h2>
+<main class="homepage-content">
+    <section class="recipe-gallery">
+        <h2>Toutes les recettes</h2>
 
-            {% if recipes_summary_list %}
-                <div class="recipe-grid">
-                    {% for recipe_summary in recipes_summary_list %}
+        {% if recipes_summary_list %}
+            <div class="recipe-grid">
+                {% for recipe_summary in recipes_summary_list %}
                     <article class="recipe-card type-{{ recipe_summary.type | default('default') }}">
                         <a href="{{ recipe_summary.html_filename }}" class="recipe-card-link">
                             {% if recipe_summary.image_path %}
-                            <div class="recipe-card-image-container">
-                                <img src="{{ recipe_summary.image_path }}" alt="Photo de {{ recipe_summary.name }}">
-                            </div>
+                                <div class="recipe-card-image-container">
+                                    <img src="{{ recipe_summary.image_path }}" alt="Photo de {{ recipe_summary.name }}">
+                                </div>
                             {% else %}
-                            <div class="recipe-card-image-placeholder">
-                                <span>Pas d'image</span>
-                            </div>
+                                <div class="recipe-card-image-placeholder">
+                                    <span>Pas d'image</span>
+                                </div>
                             {% endif %}
                             <div class="recipe-card-content">
                                 <h3>{{ recipe_summary.name }}</h3>
@@ -51,17 +51,17 @@
                             </div>
                         </a>
                     </article>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="no-recipes-message">Aucune recette disponible pour le moment. Revenez bientôt !</p>
-            {% endif %}
-        </section>
-    </main>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-recipes-message">Aucune recette disponible pour le moment. Revenez bientôt !</p>
+        {% endif %}
+    </section>
+</main>
 
-    <footer class="site-footer">
-        <p>Site fait avec ❤️</p>
-    </footer>
+<footer class="site-footer">
+    <p>Site fait avec ❤️</p>
+</footer>
 
 </body>
 </html>
