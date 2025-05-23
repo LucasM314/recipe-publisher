@@ -20,7 +20,7 @@ html, body { /* Ciblez html aussi pour plus de robustesse */
   width: auto !important;
 }
 
-.home-button {
+.page-actions-fixed {
   display: none !important;
 }
 

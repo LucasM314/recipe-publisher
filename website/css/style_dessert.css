@@ -1,12 +1,12 @@
 /* Styles spécifiques pour les desserts */
 body.type-dessert {
-    background-color: #fff0f5; /* LavenderBlush léger */
+  background-color: #fff0f5; /* LavenderBlush léger */
 }
 
 .type-dessert h1 {
-    color: #D2691E; /* Chocolate */
+  color: #D2691E; /* Chocolate */
 }
 
 .type-dessert .ingredients ul {
-    list-style-type: '🍰 '; /* Un peu de fun */
+  list-style-type: '🍰 '; /* Un peu de fun */
 }
