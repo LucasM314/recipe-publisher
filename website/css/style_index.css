@@ -169,3 +169,47 @@ body {
   margin-top: 40px;
   font-size: 0.9em;
 }
+
+.fab-add-recipe {
+  position: fixed; /* Le rend flottant par rapport au viewport */
+  bottom: 30px; /* Distance du bas */
+  right: 30px; /* Distance de la droite */
+  z-index: 999; /* S'assurer qu'il est au-dessus de la plupart des autres contenus */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 60px; /* Taille du bouton */
+  height: 60px;
+  /* padding: 15px; -- Si vous voulez contrôler la taille de l'icône via le padding du bouton */
+  box-sizing: border-box;
+
+  background-color: var(--DarkRaspberry, #8B1A3F); /* Couleur distinctive, ex: DarkRaspberry */
+  color: white; /* Pour l'icône SVG si stroke="currentColor" */
+  border: none;
+  border-radius: 50%; /* Pour un bouton parfaitement rond */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fab-add-recipe:hover,
+.fab-add-recipe:focus {
+  background-color: hsl(332, 61%, 25%); /* Version plus foncée de DarkRaspberry */
+  transform: scale(1.05) translateY(-2px); /* Léger agrandissement et soulèvement */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+.fab-add-recipe:active {
+  transform: scale(1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.fab-add-recipe svg {
+  width: 28px; /* Taille de l'icône à l'intérieur du bouton */
+  height: 28px; /* Ajustez pour qu'elle soit bien proportionnée dans le cercle */
+  /* stroke: currentColor; -- est déjà sur la balise SVG */
+}

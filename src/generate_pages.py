@@ -15,6 +15,7 @@ SOURCE_RECIPE_IMAGES_DIR = SRC_ROOT / "source_recipe_images"
 TEMPLATES_DIR = SRC_ROOT / "templates"
 TEMPLATE_RECIPE_PAGE_FILENAME = "base_recipe.html"
 TEMPLATE_HOMEPAGE_FILENAME = "index.html"
+TEMPLATE_NEW_RECIPE_FILENAME = "new_recipe.html"  # NOUVELLE CONSTANTE
 
 # Output directories (relative to parent of SRC_ROOT for a 'website' folder sibling to src)
 OUTPUT_DIR = SRC_ROOT.parent / "website"
@@ -36,7 +37,7 @@ def generate_homepage(all_recipes_data, env):
         return
 
     recipes_summary_list = []
-    for recipe_data in all_recipes_data:  # Renamed to avoid conflict
+    for recipe_data in all_recipes_data:
         if not isinstance(recipe_data, dict):
             continue
 
@@ -44,10 +45,13 @@ def generate_homepage(all_recipes_data, env):
         html_filename = generate_safe_filename(recipe_name, extension="html")
 
         image_path = None
-        if recipe_data.get("image_filename"):
-            image_path = (
-                f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{recipe_data['image_filename']}"
-            )
+        # Handle local images and URLs for the homepage.
+        image_filename_val = recipe_data.get("image_filename")
+        if image_filename_val:
+            if image_filename_val.startswith(("http://", "https://")):
+                image_path = image_filename_val
+            else:
+                image_path = f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{image_filename_val}"
 
         summary = {
             "name": recipe_name,
@@ -67,11 +71,35 @@ def generate_homepage(all_recipes_data, env):
 
     try:
         homepage_html_content = homepage_template.render(homepage_context)
-        output_homepage_path = OUTPUT_DIR / "index.html"  # Output is always index.html
+        output_homepage_path = OUTPUT_DIR / "index.html"
         output_homepage_path.write_text(homepage_html_content, encoding="utf-8")
-        print(f"  Homepage générée : {output_homepage_path}")
+        print(
+            f"  Homepage générée : {output_homepage_path.relative_to(SRC_ROOT.parent)}"
+        )
     except Exception as e:
         print(f"  Erreur lors de la génération de la page d'accueil : {e}")
+        traceback.print_exc()
+
+
+def generate_new_recipe_page(env):
+    print("\nGenerating New Recipe page...")
+    try:
+        form_template = env.get_template(TEMPLATE_NEW_RECIPE_FILENAME)
+    except Exception as e:
+        print(
+            f"  Error loading new recipe page template '{TEMPLATE_NEW_RECIPE_FILENAME}': {e}"
+        )
+        return
+
+    try:
+        form_html_content = form_template.render()
+        output_form_page_path = OUTPUT_DIR / "new_recipe.html"
+        output_form_page_path.write_text(form_html_content, encoding="utf-8")
+        print(
+            f"  New Recipe page generated: {output_form_page_path.relative_to(SRC_ROOT.parent)}"
+        )
+    except Exception as e:
+        print(f"  Error when generating new recipe page: {e}")
         traceback.print_exc()
 
 
@@ -111,7 +139,7 @@ def copy_static_assets():
     OUTPUT_CSS_DIR.mkdir(parents=True, exist_ok=True)
     if SOURCE_STATIC_CSS_DIR.exists() and SOURCE_STATIC_CSS_DIR.is_dir():
         shutil.copytree(SOURCE_STATIC_CSS_DIR, OUTPUT_CSS_DIR, dirs_exist_ok=True)
-        print(f"  CSS files copied to: {OUTPUT_CSS_DIR}")
+        print(f"  CSS files copied to: {OUTPUT_CSS_DIR.relative_to(SRC_ROOT.parent)}")
     else:
         print(f"Warning: Source CSS directory '{SOURCE_STATIC_CSS_DIR}' not found.")
 
@@ -123,7 +151,7 @@ def copy_static_assets():
     )  # Ensure it's created before copytree
     if SOURCE_STATIC_FONTS_DIR.exists() and SOURCE_STATIC_FONTS_DIR.is_dir():
         shutil.copytree(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, dirs_exist_ok=True)
-        print(f"  Fonts copied to: {OUTPUT_FONTS_DIR}")
+        print(f"  Fonts copied to: {OUTPUT_FONTS_DIR.relative_to(SRC_ROOT.parent)}")
     else:
         print(f"Warning: Source Fonts directory '{SOURCE_STATIC_FONTS_DIR}' not found.")
 
@@ -294,6 +322,9 @@ def main():
     # Generate homepage after all individual pages and PDFs are processed
     if all_recipes_data:
         generate_homepage(all_recipes_data, env)
+
+    # APPEL À LA NOUVELLE FONCTION
+    generate_new_recipe_page(env)
 
     print(
         f"\nProcessing complete. Output in: '{OUTPUT_DIR.relative_to(SRC_ROOT.parent)}'"

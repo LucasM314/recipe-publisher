@@ -48,6 +48,54 @@
     ]
   },
   {
+    "name": "Crêpes",
+    "type": "dessert",
+    "description": "Les fameuses crêpes de maman",
+    "image_filename": "https://img.cuisineaz.com/660x495/2015/01/29/i113699-photo-de-crepe-facile.webp",
+    "durations": {
+      "total": "",
+      "preparation": "20min",
+      "cooking": "",
+      "rest": "pas de repos on les mange chauuudes :D"
+    },
+    "ingredients": {
+      "serves": "",
+      "list": [
+        {
+          "quantity": "350g",
+          "name": "farine"
+        },
+        {
+          "quantity": "4",
+          "name": "oeufs"
+        },
+        {
+          "quantity": "1 pincée",
+          "name": "sel"
+        },
+        {
+          "quantity": "40g",
+          "name": "beurre"
+        },
+        {
+          "quantity": "1/2 litre",
+          "name": "lait"
+        },
+        {
+          "quantity": "4/5 sachets de",
+          "name": "sucre vanillé"
+        }
+      ]
+    },
+    "utensils": [],
+    "instructions": [
+      "Faire fondre le beurre",
+      "Pendant ce temps, mettre la farine, les oeufs, la moitié de lait puis mélanger",
+      "Ajouter la moitié de lait restant, le beurre fondu, le sucre vanillé",
+      "Laisse reposer (facultatif). Si la pâte est trop épaisse, ajouter un peu de lait."
+    ]
+},
+  {
     "name": "Nom de la recette",
     "type": "dessert",
     "description": "Description de la recette.",
