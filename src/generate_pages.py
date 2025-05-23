@@ -264,13 +264,18 @@ def main():
             # print(f"    Image for '{recipe_name_fr}' is a URL: {image_filename_val}")
             pass  # Keep the URL as is
 
-        output_html_filename_str = generate_safe_filename(
-            recipe_name_fr, extension="html"
-        )
-        output_pdf_filename_str = generate_safe_filename(
-            recipe_name_fr, extension="pdf"
-        )
-        # Chemin relatif depuis la page HTML (dans OUTPUT_DIR) vers le PDF (dans OUTPUT_PDF_DIR)
+        # Détermination du chemin de l'image pour le template (URL ou chemin local)
+        image_path = None
+        if image_filename_val:
+            if image_filename_val.startswith(("http://", "https://")):
+                image_path = image_filename_val
+            else:
+                image_path = f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{image_filename_val}"
+        recipe_data["image_path"] = image_path
+
+        # Génération des noms de fichiers de sortie HTML et PDF (corrige le NameError)
+        output_html_filename_str = generate_safe_filename(recipe_name_fr, extension="html")
+        output_pdf_filename_str = generate_safe_filename(recipe_name_fr, extension="pdf")
         recipe_data["pdf_path"] = f"{OUTPUT_PDF_DIR.name}/{output_pdf_filename_str}"
 
         # Context for rendering the individual recipe page

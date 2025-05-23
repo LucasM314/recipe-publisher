@@ -128,8 +128,8 @@
                 <!-- <span class="separation-line"></span> --> {# Ligne de séparation si besoin avant le footer #}
             {% endif %}
 
-            {% if recipe.image_filename %}
-                <img src="recipe_images/{{ recipe.image_filename }}" alt="Illustration de {{ recipe.name }}"/>
+            {% if recipe.image_path %}
+                <img src="{{ recipe.image_path }}" alt="Illustration de {{ recipe.name }}"/>
             {% else %}
                 <!-- Optionnel: une image placeholder si aucune image n'est fournie -->
                 <!-- <img src="placeholder.jpg" alt="Pas d'image disponible" /> -->
