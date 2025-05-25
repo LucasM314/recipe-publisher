@@ -3,9 +3,9 @@ import json
 import shutil
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML as WeasyHTML, CSS as WeasyCSS
-from weasyprint.text.fonts import FontConfiguration
 import traceback
+import asyncio
+from playwright.async_api import async_playwright
 
 # Constants for paths
 SRC_ROOT = Path(__file__).resolve().parent
@@ -15,7 +15,7 @@ SOURCE_RECIPE_IMAGES_DIR = SRC_ROOT / "source_recipe_images"
 TEMPLATES_DIR = SRC_ROOT / "templates"
 TEMPLATE_RECIPE_PAGE_FILENAME = "base_recipe.html"
 TEMPLATE_HOMEPAGE_FILENAME = "index.html"
-TEMPLATE_NEW_RECIPE_FILENAME = "new_recipe.html"  # NOUVELLE CONSTANTE
+TEMPLATE_NEW_RECIPE_FILENAME = "new_recipe.html"
 
 # Output directories (relative to parent of SRC_ROOT for a 'website' folder sibling to src)
 OUTPUT_DIR = SRC_ROOT.parent / "website"
@@ -74,10 +74,10 @@ def generate_homepage(all_recipes_data, env):
         output_homepage_path = OUTPUT_DIR / "index.html"
         output_homepage_path.write_text(homepage_html_content, encoding="utf-8")
         print(
-            f"  Homepage générée : {output_homepage_path.relative_to(SRC_ROOT.parent)}"
+            f"  Homepage generated: {output_homepage_path.relative_to(SRC_ROOT.parent)}"
         )
     except Exception as e:
-        print(f"  Erreur lors de la génération de la page d'accueil : {e}")
+        print(f"  Error during homepage generation: {e}")
         traceback.print_exc()
 
 
@@ -146,9 +146,7 @@ def copy_static_assets():
     # Fonts
     if OUTPUT_FONTS_DIR.exists():
         shutil.rmtree(OUTPUT_FONTS_DIR)
-    OUTPUT_FONTS_DIR.mkdir(
-        parents=True, exist_ok=True
-    )  # Ensure it's created before copytree
+    OUTPUT_FONTS_DIR.mkdir(parents=True, exist_ok=True)
     if SOURCE_STATIC_FONTS_DIR.exists() and SOURCE_STATIC_FONTS_DIR.is_dir():
         shutil.copytree(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, dirs_exist_ok=True)
         print(f"  Fonts copied to: {OUTPUT_FONTS_DIR.relative_to(SRC_ROOT.parent)}")
@@ -156,8 +154,49 @@ def copy_static_assets():
         print(f"Warning: Source Fonts directory '{SOURCE_STATIC_FONTS_DIR}' not found.")
 
 
-def main():
-    # Create output directories
+# Renamed and modified for browser reuse and better logging
+async def generate_pdf_from_html_with_browser(
+    browser, html_file_path: Path, pdf_file_path: Path, recipe_name: str
+):
+    """
+    Generates a PDF from an HTML file using an existing Playwright browser instance.
+    Includes logging for start, success, or failure.
+    """
+    print(f"  Generating PDF for '{recipe_name}': {pdf_file_path.name}")
+    page = None
+    try:
+        page = await browser.new_page()
+        # Use file URI scheme and resolve to absolute path for local files
+        await page.goto(f"file://{html_file_path.resolve()}")
+        # Add options as needed, e.g., margins, print_background
+        pdf_options = {
+            "path": str(pdf_file_path),
+            "format": "A4",
+            "print_background": True,  # Important for styles like background colors
+            "margin": {  # Optional: example margins
+                "top": "20mm",
+                "bottom": "20mm",
+                "left": "15mm",
+                "right": "15mm",
+            }
+        }
+        await page.pdf(**pdf_options)
+        await page.close()  # Close the page, not the browser
+        print(
+            f"  Successfully generated PDF for '{recipe_name}': {pdf_file_path.relative_to(SRC_ROOT.parent)}"
+        )
+        return True  # Indicate success
+    except Exception as e:
+        print(
+            f"  Error generating PDF for '{recipe_name}' ({pdf_file_path.name}): {e}"
+        )
+        traceback.print_exc()
+        if page:  # Ensure page is closed on error too
+            await page.close()
+        return False  # Indicate failure
+
+
+async def main():  # Changed to async main
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_RECIPE_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_PDF_DIR.mkdir(parents=True, exist_ok=True)
@@ -166,8 +205,6 @@ def main():
 
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     recipe_page_template = env.get_template(TEMPLATE_RECIPE_PAGE_FILENAME)
-
-    font_config = FontConfiguration()
 
     master_json_path = RECIPES_DATA_DIR / MASTER_JSON_FILENAME
     try:
@@ -193,142 +230,138 @@ def main():
         f"\nFound {len(all_recipes_data)} recipe(s) in '{master_json_path}'. Processing individual recipes..."
     )
 
-    # Prepare list of stylesheets for WeasyPrint (loaded once)
-    weasy_stylesheets = []
-    main_css_path = OUTPUT_CSS_DIR / "style_base.css"
-    print_css_path = OUTPUT_CSS_DIR / "print.css"
+    pdf_generation_tasks = []  # List to hold PDF generation tasks
 
-    if main_css_path.exists():
-        weasy_stylesheets.append(
-            WeasyCSS(filename=main_css_path, font_config=font_config)
-        )
-    else:
-        print(f"Warning: Main CSS file not found at {main_css_path}")
-    if print_css_path.exists():
-        weasy_stylesheets.append(
-            WeasyCSS(
-                filename=print_css_path, font_config=font_config, media_type="print"
-            )
-        )
-    else:
-        print(f"Warning: Print CSS file not found at {print_css_path}")
+    # Launch Playwright browser once for all PDF generations
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)  # Explicitly headless
 
-    # Process each recipe
-    for i, recipe_data in enumerate(all_recipes_data):
-        if not isinstance(recipe_data, dict):
-            print(f"  Skipping item {i + 1}: not a valid recipe object.")
-            continue
+        for i, recipe_data in enumerate(all_recipes_data):
+            if not isinstance(recipe_data, dict):
+                print(f"  Skipping item {i + 1}: not a valid recipe object.")
+                continue
 
-        recipe_name_fr = recipe_data.get("name", f"untitled_recipe_{i + 1}")
-        print(f"\nProcessing recipe: {recipe_name_fr}")
+            recipe_name_fr = recipe_data.get("name", f"untitled_recipe_{i + 1}")
+            print(
+                f"\nProcessing HTML for recipe: {recipe_name_fr}"
+            )  # Log HTML processing start
 
-        # Ensure default values and apply transformations
-        recipe_data["name"] = recipe_name_fr
-        recipe_data.setdefault("type", "default")
-        recipe_data.setdefault("description", "Une délicieuse recette à découvrir.")
+            # Ensure default values and apply transformations
+            recipe_data["name"] = recipe_name_fr
+            recipe_data.setdefault("type", "default")
+            recipe_data.setdefault("description", "Une délicieuse recette à découvrir.")
 
-        if "ingredients" in recipe_data and "list" in recipe_data["ingredients"]:
-            for ingredient_item in recipe_data["ingredients"]["list"]:
-                original_quantity = ingredient_item.get("quantity")
-                current_quantity_str = ""
-                if original_quantity is not None:
-                    current_quantity_str = str(original_quantity).strip()
-
-                needs_de = needs_de_separator(current_quantity_str)
-                ingredient_item["quantity"] = current_quantity_str + " de" * needs_de
-
-        # Image copying
-        image_filename_val = recipe_data.get("image_filename")
-        if image_filename_val and not image_filename_val.startswith(
-            ("http://", "https://")
-        ):  # Process only local images
-            source_image_path = SOURCE_RECIPE_IMAGES_DIR / image_filename_val
-            dest_image_path = OUTPUT_RECIPE_IMAGES_DIR / image_filename_val
-            if source_image_path.exists() and source_image_path.is_file():
-                try:
-                    shutil.copy2(source_image_path, dest_image_path)
-                    # print(f"    Image '{image_filename_val}' copied to '{dest_image_path}'")
-                except Exception as e:
-                    print(
-                        f"    Error copying image '{source_image_path}' to '{dest_image_path}': {e}"
+            if "ingredients" in recipe_data and "list" in recipe_data["ingredients"]:
+                for ingredient_item in recipe_data["ingredients"]["list"]:
+                    original_quantity = ingredient_item.get("quantity")
+                    current_quantity_str = ""
+                    if original_quantity is not None:
+                        current_quantity_str = str(original_quantity).strip()
+                    needs_de = needs_de_separator(current_quantity_str)
+                    ingredient_item["quantity_display"] = current_quantity_str + (
+                        " de" if needs_de else ""
                     )
-                    recipe_data["image_filename"] = None  # Nullify if copy failed
-            else:
-                print(
-                    f"    Warning: Local image '{source_image_path}' for recipe '{recipe_name_fr}' not found."
-                )
-                recipe_data["image_filename"] = None  # Nullify if not found
-        elif image_filename_val and image_filename_val.startswith(
-            ("http://", "https://")
-        ):
-            # print(f"    Image for '{recipe_name_fr}' is a URL: {image_filename_val}")
-            pass  # Keep the URL as is
 
-        # Détermination du chemin de l'image pour le template (URL ou chemin local)
-        image_path = None
-        if image_filename_val:
-            if image_filename_val.startswith(("http://", "https://")):
-                image_path = image_filename_val
-            else:
-                image_path = f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{image_filename_val}"
-        recipe_data["image_path"] = image_path
+            image_filename_val = recipe_data.get("image_filename")
+            image_path_for_template = None  # Renamed to avoid confusion
+            if image_filename_val:
+                if image_filename_val.startswith(("http://", "https://")):
+                    image_path_for_template = image_filename_val
+                else:
+                    source_image_path = SOURCE_RECIPE_IMAGES_DIR / image_filename_val
+                    dest_image_path = OUTPUT_RECIPE_IMAGES_DIR / image_filename_val
+                    if source_image_path.exists() and source_image_path.is_file():
+                        try:
+                            shutil.copy2(source_image_path, dest_image_path)
+                            # Path for HTML template should be relative to the HTML file
+                            # or an absolute path from the web server root.
+                            image_path_for_template = (
+                                f"{OUTPUT_RECIPE_IMAGES_DIR.name}/{image_filename_val}"
+                            )
+                        except Exception as e:
+                            print(
+                                f"    Error copying image '{source_image_path}' to '{dest_image_path}': {e}"
+                            )
+                    else:
+                        print(
+                            f"    Warning: Local image '{source_image_path}' for recipe '{recipe_name_fr}' not found."
+                        )
+            recipe_data["image_path"] = image_path_for_template
 
-        # Génération des noms de fichiers de sortie HTML et PDF (corrige le NameError)
-        output_html_filename_str = generate_safe_filename(recipe_name_fr, extension="html")
-        output_pdf_filename_str = generate_safe_filename(recipe_name_fr, extension="pdf")
-        recipe_data["pdf_path"] = f"{OUTPUT_PDF_DIR.name}/{output_pdf_filename_str}"
+            output_html_filename_str = generate_safe_filename(
+                recipe_name_fr, extension="html"
+            )
+            output_pdf_filename_str = generate_safe_filename(
+                recipe_name_fr, extension="pdf"
+            )
+            recipe_data["pdf_path"] = f"{OUTPUT_PDF_DIR.name}/{output_pdf_filename_str}"
 
-        # Context for rendering the individual recipe page
-        recipe_page_context = {
-            "recipe": recipe_data,
-            "site_title": "Le Grimoire de Véro",  # Pass site title for consistency in <title>
-        }
+            # Context for rendering the individual recipe page
+            recipe_page_context = {
+                "recipe": recipe_data,
+                "site_title": "Le Grimoire de Véro",
+            }
 
-        # Generate HTML page
-        try:
-            html_content = recipe_page_template.render(recipe_page_context)
             output_html_path = OUTPUT_DIR / output_html_filename_str
-            output_html_path.write_text(html_content, encoding="utf-8")
+            try:
+                html_content = recipe_page_template.render(recipe_page_context)
+                output_html_path.write_text(html_content, encoding="utf-8")
+                print(
+                    f"  HTML page generated: {output_html_path.relative_to(SRC_ROOT.parent)}"
+                )
+
+                # Schedule PDF generation
+                output_pdf_path = OUTPUT_PDF_DIR / output_pdf_filename_str
+                task = asyncio.create_task(
+                    generate_pdf_from_html_with_browser(
+                        browser, output_html_path, output_pdf_path, recipe_name_fr
+                    )
+                )
+                pdf_generation_tasks.append(task)
+
+            except Exception as e:
+                print(
+                    f"  Error during HTML processing or PDF scheduling for '{recipe_name_fr}': {e}"
+                )
+                traceback.print_exc()
+                continue  # Skip PDF for this recipe if HTML part fails
+
+        # Wait for all PDF generation tasks to complete
+        if pdf_generation_tasks:
             print(
-                f"  HTML page generated: {output_html_path.relative_to(SRC_ROOT.parent)}"
+                f"\nStarting PDF generation for {len(pdf_generation_tasks)} recipe(s)..."
             )
-        except Exception as e:
-            print(f"  Error rendering HTML template for '{recipe_name_fr}': {e}")
-            traceback.print_exc()
-            continue
-
-        # Generate PDF page
-        try:
-            html_for_pdf = WeasyHTML(
-                filename=output_html_path, base_url=str(OUTPUT_DIR.resolve())
+            results = await asyncio.gather(
+                *pdf_generation_tasks, return_exceptions=True
             )
 
-            # Add recipe-type-specific CSS for PDF if it exists
-            current_stylesheets_for_pdf = list(weasy_stylesheets)
-            if recipe_data["type"] != "default":
-                type_css_filename = f"style_{recipe_data['type']}.css"
-                type_css_path = OUTPUT_CSS_DIR / type_css_filename
-                if type_css_path.exists():
-                    current_stylesheets_for_pdf.append(
-                        WeasyCSS(filename=type_css_path, font_config=font_config)
+            successful_pdfs = 0
+            for result in results:
+                if (
+                    result is True
+                ):  # generate_pdf_from_html_with_browser returns True on success
+                    successful_pdfs += 1
+                elif isinstance(result, Exception):
+                    print(
+                        f"  A PDF generation task encountered an exception: {result}"
                     )
 
-            output_pdf_path = OUTPUT_PDF_DIR / output_pdf_filename_str
-            html_for_pdf.write_pdf(
-                output_pdf_path, stylesheets=current_stylesheets_for_pdf
-            )
             print(
-                f"  PDF page generated : {output_pdf_path.relative_to(SRC_ROOT.parent)}"
+                f"\nPDF Generation Summary: {successful_pdfs} out of {len(pdf_generation_tasks)} PDFs generated successfully."
             )
-        except Exception as e:
-            print(f"  Error generating PDF for '{recipe_name_fr}': {e}")
-            traceback.print_exc()
+            if successful_pdfs < len(pdf_generation_tasks):
+                print(
+                    "  Please check the logs above for specific errors."
+                )
+        else:
+            print("\nNo PDF generation tasks were scheduled.")
+
+        await browser.close()  # Close the browser instance after all tasks are done
 
     # Generate homepage after all individual pages and PDFs are processed
     if all_recipes_data:
         generate_homepage(all_recipes_data, env)
 
-    # APPEL À LA NOUVELLE FONCTION
     generate_new_recipe_page(env)
 
     print(
@@ -337,4 +370,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Run the async main function
+    asyncio.run(main())
