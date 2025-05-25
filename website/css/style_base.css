@@ -52,37 +52,56 @@
 }
 
 body {
-  height: auto;
   background-color: var(--Eggshell);
-  font-family: var(--font1-family);
+  font-family: var(--font1-family), serif;
   color: var(--WengeBrown);
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
-.page-actions-fixed {
-  position: fixed;
-  top: 20px;
-  left: 20px; /* Ou right: 20px; pour aligner à droite */
-  z-index: 1000;
-  display: flex; /* Aligne les boutons horizontalement */
-  gap: 10px; /* Espace entre les boutons */
+.recipe-page-section {
+  max-width: var(--page-content-max-width);
+  margin: 40px auto;
 }
 
-/* Style commun pour les boutons d'action */
-.action-button {
+.recipe-page-content-container {
+  width: 100%;
+  padding: 30px;
+  margin-inline: auto; /* Horizontal centering */
+
+  background-color: var(--White);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.recipe-header-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+}
+
+.recipe-header-container h1 {
+  font-family: var(--font2-family), serif;
+  font-size: 2.5em;
+  color: var(--DarkCharcoal)
+}
+
+.page-actions {
+  display: flex; /* Align the action buttons horizontally */
+  gap: 10px; /* Gap between the action buttons */
+}
+
+/* Common rules for action buttons */
+.action-button {
   width: 48px;
   height: 48px;
   padding: 10px;
-  box-sizing: border-box;
-  color: white; /* Couleur pour les icônes SVG (stroke="currentColor") */
-  border: none;
+
+  color: white; /* SVG icon color (stroke="currentColor") */
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  text-decoration: none;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -100,10 +119,9 @@ body {
 .action-button svg {
   width: 100%;
   height: 100%;
-  /* stroke: currentColor; est sur la balise SVG, donc hérité de la 'color' du bouton */
 }
 
-/* Styles spécifiques pour le bouton Home */
+/* Home button specific style */
 .home-button {
   background-color: #9a3737d4; /* Votre couleur existante */
 }
@@ -122,40 +140,6 @@ body {
 .pdf-button:hover,
 .pdf-button:focus {
   background-color: hsl(14, 45%, 26%); /* Version plus foncée de Nutmeg */
-}
-
-.recipe-page-section {
-  margin: 40px auto;
-  display: grid;
-  place-items: center;
-  padding: 0 20px;
-}
-
-.recipe-page-content-container {
-  max-width: var(--page-content-max-width);
-  width: 100%;
-  background-color: var(--White);
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-.recipe-page-content-container > img {
-  max-width: 100%;
-  border-radius: 12px;
-  margin-top: 25px;
-  display: block;
-  height: auto;
-}
-
-.recipe-page-content-container h1 {
-  font-family: var(--font2-family);
-  font-weight: 400;
-  font-size: 2.5em;
-  color: var(--DarkCharcoal);
-  margin-bottom: 0.5em;
 }
 
 .recipe-page-content-container p { /* Paragraphe de description */
@@ -276,6 +260,14 @@ h2 { /* Titres de section comme Ingrédients, Instructions */
   position: absolute;
   left: 5px;
   top: 4.5px;
+}
+
+.recipe-page-content-container > img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 25px;
+  display: block;
+  height: auto;
 }
 
 /* Styles pour mobile, basés sur le fichier original */
