@@ -146,7 +146,7 @@
             <label for="description">Description :</label><textarea id="description" name="description"></textarea>
             <label for="image_filename">Nom du fichier image :</label><input type="text" id="image_filename" name="image_filename" placeholder="Pour une image locale (dans source_recipe_images)">
             <label for="image_url">OU URL de l'image :</label><input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg">
-            <div class="section"><h3>Durées</h3><label for="total_duration">Total :</label><input type="text" id="total_duration" name="total_duration" placeholder="ex: 1h 30min"><label for="prep_duration">Préparation :</label><input type="text" id="prep_duration" name="prep_duration" placeholder="ex: 30min"><label for="cook_duration">Cuisson :</label><input type="text" id="cook_duration" name="cook_duration" placeholder="ex: 1h"><label for="rest_duration">Repos :</label><input type="text" id="rest_duration" name="rest_duration" placeholder="ex: 2h ou N/A"></div>
+            <div class="section"><h3>Durées</h3><label for="total_duration">Total :</label><input type="text" id="total_duration" name="total_duration" placeholder="ex: 1h 30min"><label for="prep_duration">Préparation :</label><input type="text" id="prep_duration" name="prep_duration" placeholder="ex: 30min"><label for="cook_duration">Cuisson :</label><input type="text" id="cook_duration" name="cook_duration" placeholder="ex: 1h"><label for="rest_duration">Repos :</label><input type="text" id="rest_duration" name="rest_duration" placeholder="ex: 2h ou 1h30"></div>
 
             <div class="section">
                 <div class="section-header"><h3>Ingrédients</h3><button type="button" class="action-list-button add-item-btn" onclick="addIngredient()" title="Ajouter un ingrédient"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></button></div>
@@ -266,7 +266,7 @@
             document.querySelectorAll('#instructionsList .list-item textarea[name^="instruction_step_"]').forEach(textarea => {
                 if(textarea.value.trim() !== "") recipeJson.instructions.push(textarea.value.trim());
             });
-            for (const key in recipeJson.durations) if (["", "n/a", "..."].includes(recipeJson.durations[key].trim().toLowerCase())) recipeJson.durations[key] = "";
+            for (const key in recipeJson.durations) if (!recipeJson.durations[key].trim()) recipeJson.durations[key] = "";
             if (!recipeJson.image_filename) recipeJson.image_filename = "";
             document.getElementById('jsonOutput').value = JSON.stringify(recipeJson, null, 2);
         });
