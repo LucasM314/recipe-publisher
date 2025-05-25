@@ -1,156 +1,157 @@
+/* css/print.css */
+
 @page {
-  size: A4 portrait;
-  margin: 20mm;
+  size: A4;
+  margin: 1.5cm; /* Reverted to the previous standard A4 margin */
 }
 
 body {
-  background-color: white !important;
+  font-family: "Outfit", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 10pt;
-  -webkit-print-color-adjust: exact !important; /* Pour forcer l'impression des couleurs/fonds si besoin */
-  print-color-adjust: exact !important;
-  color: var(--umber) !important; /* Couleur de texte par défaut pour impression */
+  line-height: 1.4;
+  color: var(--umber) !important;
+  background-color: #ffffff !important;
+  -webkit-print-color-adjust: exact !important;
+  color-adjust: exact !important;
 }
 
-/* --- CRITICAL RESETS pour la pagination --- */
-html, body { /* Ciblez html aussi pour plus de robustesse */
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important; /* Très important pour éviter le contenu coupé */
-  width: auto !important;
-}
-
-.page-actions {
+/* Hide elements not suitable for print */
+.page-actions,
+.recipe-page-content-container > img, /* Cela cache l'image principale de la recette DANS le contenu */
+footer.attribution {
   display: none !important;
 }
 
 .recipe-page-section {
-  display: block !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  box-shadow: none !important;
 }
 
 .recipe-page-content-container {
-  max-width: 100% !important;
   width: 100% !important;
-  padding: 0 !important; /* Temporairement sans padding pour simplifier */
-  box-sizing: border-box !important; /* Essentiel */
-  overflow: hidden !important; /* Pour voir si ça cache juste, ou si ça change le zoom */
-
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: white !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: white !important;
-  height: auto !important; /* Important pour que le conteneur s'adapte au contenu */
-  min-height: 0 !important;
-
-
-  /*border-radius: 0 !important;*/
-  /*box-shadow: none !important;*/
-  /*padding: 0 !important;*/
-  /*max-width: 100% !important;*/
-  /*background-color: var(--White) !important;*/
+  border: none !important;
 }
 
-/* TODO: Fix le pb d'image, actuellement la height est fixée, mais si on la met
-en auto ca marche pas : l'image overflow a droite.
-Faudrait revoir un peu tout le css pour comprendre mais là flemme. */
-.recipe-page-content-container > img {
-  max-width: 100% !important; /* L'image ne doit pas dépasser la largeur de son parent */
-  width: auto !important;
-  height: auto !important;
-  max-height: 8cm !important;
-  display: block !important; /* Nécessaire pour que margin: auto fonctionne bien */
-  margin: 1em auto !important;
-  border-radius: 0 !important; /* Pas de coins arrondis pour l'impression */
-  page-break-inside: avoid !important; /* Évite que l'image soit coupée sur deux pages */
-  box-sizing: border-box !important; /* Bonne pratique */
+/* Headings */
+h1, h2, h3 {
+  font-family: var(--font2-family), Georgia, "Times New Roman", Times, serif;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 }
 
+.recipe-header-container h1 {
+  font-size: 24pt;
+  color: var(--soot) !important;
+}
+
+.recipe-description {
+  margin-bottom: 2em; /* Approx 10pt */
+  font-size: 10pt;
+}
+
+/* Durations and Utensils */
 .durations-and-utensils-container {
   display: flex !important;
-  gap: 10mm !important;
-  margin-bottom: 1em !important; /* Ajout important pour l'espacement */
+  flex-wrap: wrap;
+  gap: 10px !important; /* Approx 7.5pt */
+  margin-bottom: 0.8em !important; /* Approx 8pt (was 1.5em / 15pt) */
+  page-break-inside: avoid;
 }
 
-/* TODO: régler l'overflow sur la droite de ustensiles */
 .durations-container, .utensils-container {
+  flex: 1 1 180px;
+  padding: 0.8em;
   background-color: var(--rosewhite) !important;
-  border: 1px solid var(--lightgrey) !important; /* Garder une bordure légère */
-  padding: 10pt !important;
-  border-radius: 8px !important;
-  flex: 1 !important;
-  min-width: 0 !important; /* Ajouté pour permettre le rétrécissement dans le flex container */
+  border: 1px solid var(--lightgrey) !important;
+  border-radius: 6px !important;
+  min-width: 0;
+  page-break-inside: avoid;
 }
 
 .durations-container h3, .utensils-container h3 {
+  font-size: 13pt;
   color: var(--mulberry) !important;
-  font-size: 1.2em !important; /* alternative plus grande : 1.4em */
+  margin-bottom: 0.4em;
 }
 
-.recipe-page-content-container h1 {
-  color: var(--soot) !important;
-  font-size: 2em !important; /* alternative plus grande : 2.4em */
+.durations-list, .utensils-list {
+  padding-left: 15px;
+  margin-left: 0;
+  font-size: 9.5pt;
 }
 
-.recipe-page-content-container h2 { /* Ingrédients, Instructions */
-  color: var(--nutmeg) !important;
-  font-size: 1.5em !important; /* alternative plus grande : 1.7em */
-}
-
-.durations-list li > span:first-child,
-.utensils-list li > span:first-child {
-  font-weight: 600 !important;
-}
-
-
-h3 {
-  margin-bottom: 0.3em !important;
-}
-
+/* Ingredients and Instructions Sections */
 h2 {
-  margin-bottom: 0.5em !important;
-}
-
-.ingredients-list > li {
-  padding-left: 20px !important;
-}
-
-.ingredients-list > li::before {
+  font-size: 18pt;
   color: var(--nutmeg) !important;
+  margin-top: 0.8em !important;
+  margin-bottom: 0.75em !important;
 }
 
-.instruction-list > li {
-  padding-left: 30px !important;
+/* Lists */
+ul, ol {
+  padding-left: 20px;
 }
 
-.instruction-list > li::before {
-  color: var(--nutmeg) !important;
+.ingredients-list {
+  margin-bottom: 1.5em !important;
 }
 
-/* Assurer que le texte dans les listes garde la bonne couleur */
-
-.durations-list, .utensils-list, .ingredients-list, .instruction-list,
-.durations-list li, .utensils-list li, .ingredients-list li, .instruction-list li,
-.durations-list li span, .utensils-list li span, .ingredients-list li span, .instruction-list li span {
-  color: var(--umber) !important;
-}
-
-/* Sauf pour les éléments qui ont déjà une couleur spécifique (comme les puces/numéros) */
-
-
-.separation-line {
-  border-top: 1px solid var(--lightgrey) !important;
-}
-
-.attribution {
-  display: none !important;
-}
-
-h1, h2, h3, h4, h5, h6, p, .durations-container, .utensils-container {
-  page-break-inside: avoid;
+.instruction-list {
+  margin-bottom: 1em !important;
 }
 
 li {
+  margin-bottom: 0.3em;
   page-break-inside: avoid;
+}
+
+.ingredients-list > li::marker,
+.instruction-list > li::marker {
+  color: var(--nutmeg) !important;
+  font-weight: bold;
+}
+
+.instruction-list > li {
+  padding-left: 8px;
+}
+
+.separation-line {
+  display: block;
+  border-top: 1px solid var(--lightgrey) !important;
+  margin: 0.5em 0 !important;
+}
+
+a, a:visited {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
+
+/* ---- NOUVEAU CSS POUR L'IMAGE DE PIED DE PAGE EN IMPRESSION ---- */
+.print-footer-image-container {
+  page-break-inside: avoid !important; /* Essayer de garder tout ce conteneur sur une seule page */
+  margin-top: 2cm !important;      /* Espace au-dessus de l'image ; ajustez si nécessaire */
+  text-align: center !important;     /* Centrer l'image dans le conteneur */
+  width: 100% !important;          /* S'assurer qu'il prend toute la largeur disponible pour le centrage */
+}
+
+#print-page-footer-image {
+  max-width: 60% !important;        /* Largeur maximale de l'image par rapport à son conteneur */
+                                   /* Ajustez selon vos besoins, ex: 50%, 80%, ou une largeur fixe comme 10cm */
+  max-height: 4cm !important;       /* CRUCIAL : Définir une hauteur maximale pour l'image. */
+                                   /* Ajustez ceci en fonction de votre image et de l'espace souhaité. */
+  object-fit: contain !important;   /* Assure que le ratio de l'image est maintenu, s'adapte aux dimensions */
+  display: inline-block !important; /* Permet à text-align:center sur le parent de fonctionner et respecte le ratio de l'image */
 }

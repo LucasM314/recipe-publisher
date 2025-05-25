@@ -176,6 +176,12 @@ h2 {
   border-radius: 12px;
 }
 
+.attribution {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.8em;
+}
+
 /* Mobile styles */
 @media screen and (max-width: 700px) {
   .recipe-page-section {
