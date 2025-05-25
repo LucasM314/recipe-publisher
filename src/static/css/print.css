@@ -4,11 +4,11 @@
 }
 
 body {
-  background-color: var(--White) !important;
+  background-color: white !important;
   font-size: 10pt;
   -webkit-print-color-adjust: exact !important; /* Pour forcer l'impression des couleurs/fonds si besoin */
   print-color-adjust: exact !important;
-  color: var(--WengeBrown) !important; /* Couleur de texte par défaut pour impression */
+  color: var(--umber) !important; /* Couleur de texte par défaut pour impression */
 }
 
 /* --- CRITICAL RESETS pour la pagination --- */
@@ -40,7 +40,7 @@ html, body { /* Ciblez html aussi pour plus de robustesse */
 
   border-radius: 0 !important;
   box-shadow: none !important;
-  background-color: var(--White) !important;
+  background-color: white !important;
   height: auto !important; /* Important pour que le conteneur s'adapte au contenu */
   min-height: 0 !important;
 
@@ -75,8 +75,8 @@ Faudrait revoir un peu tout le css pour comprendre mais là flemme. */
 
 /* TODO: régler l'overflow sur la droite de ustensiles */
 .durations-container, .utensils-container {
-  background-color: var(--RoseWhite) !important;
-  border: 1px solid var(--LightGrey) !important; /* Garder une bordure légère */
+  background-color: var(--rosewhite) !important;
+  border: 1px solid var(--lightgrey) !important; /* Garder une bordure légère */
   padding: 10pt !important;
   border-radius: 8px !important;
   flex: 1 !important;
@@ -84,17 +84,17 @@ Faudrait revoir un peu tout le css pour comprendre mais là flemme. */
 }
 
 .durations-container h3, .utensils-container h3 {
-  color: var(--DarkRaspberry) !important;
+  color: var(--mulberry) !important;
   font-size: 1.2em !important; /* alternative plus grande : 1.4em */
 }
 
 .recipe-page-content-container h1 {
-  color: var(--DarkCharcoal) !important;
+  color: var(--soot) !important;
   font-size: 2em !important; /* alternative plus grande : 2.4em */
 }
 
 .recipe-page-content-container h2 { /* Ingrédients, Instructions */
-  color: var(--Nutmeg) !important;
+  color: var(--nutmeg) !important;
   font-size: 1.5em !important; /* alternative plus grande : 1.7em */
 }
 
@@ -117,7 +117,7 @@ h2 {
 }
 
 .ingredients-list > li::before {
-  color: var(--Nutmeg) !important;
+  color: var(--nutmeg) !important;
 }
 
 .instruction-list > li {
@@ -125,7 +125,7 @@ h2 {
 }
 
 .instruction-list > li::before {
-  color: var(--Nutmeg) !important;
+  color: var(--nutmeg) !important;
 }
 
 /* Assurer que le texte dans les listes garde la bonne couleur */
@@ -133,14 +133,14 @@ h2 {
 .durations-list, .utensils-list, .ingredients-list, .instruction-list,
 .durations-list li, .utensils-list li, .ingredients-list li, .instruction-list li,
 .durations-list li span, .utensils-list li span, .ingredients-list li span, .instruction-list li span {
-  color: var(--WengeBrown) !important;
+  color: var(--umber) !important;
 }
 
 /* Sauf pour les éléments qui ont déjà une couleur spécifique (comme les puces/numéros) */
 
 
 .separation-line {
-  border-top: 1px solid var(--LightGrey) !important;
+  border-top: 1px solid var(--lightgrey) !important;
 }
 
 .attribution {

@@ -1,90 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Grimoire de Véro</title>
-    <!-- Link to your main CSS file. Adjust path as needed.
-         This assumes index.html is in the root of your output, and css is in output/css/ -->
-    <link rel="stylesheet" href="css/style_base.css">
-    <link rel="stylesheet" href="css/style_index.css"> <!-- Specific CSS for homepage -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Grimoire de Véro</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style_index.css">
 </head>
 <body>
-
-<header class="site-header">
-    <h1>Le Grimoire de Véro</h1>
-    <p class="tagline">Joyeuse fête des mères !</p>
-    <!-- You could add a navigation menu here if you have other pages -->
-    <!-- <nav>
-        <a href="#">Accueil</a>
-        <a href="#">À Propos</a>
-    </nav> -->
+<header>
+  <h1>Le Grimoire de Véro</h1>
+  <p class="tagline">Joyeuse fête des mères !</p>
 </header>
 
 <main class="homepage-content">
-    <section class="recipe-gallery">
-        <h2>Toutes les recettes</h2>
+  <section class="recipe-gallery">
+    <h2>Toutes les recettes</h2>
 
+    
+      <div class="recipe-grid">
         
-            <div class="recipe-grid">
+          <article class="recipe-card type-plat">
+            <a href="quiche_lorraine.html" class="recipe-card-link">
+              
+                <div class="recipe-card-image-container">
+                  <img src="recipe_images/quiche_lorraine.jpg" alt="Photo de Quiche Lorraine">
+                </div>
+              
+              <div class="recipe-card-content">
+                <h3>Quiche Lorraine</h3>
                 
-                    <article class="recipe-card type-plat">
-                        <a href="quiche_lorraine.html" class="recipe-card-link">
-                            
-                                <div class="recipe-card-image-container">
-                                    <img src="recipe_images/quiche_lorraine.jpg" alt="Photo de Quiche Lorraine">
-                                </div>
-                            
-                            <div class="recipe-card-content">
-                                <h3>Quiche Lorraine</h3>
-                                
-                                    <p class="recipe-card-description">Une quiche Lorraine façon maman (avec tomates !) et rapide à faire.</p>
-                                
-                                <!-- Optional: Display type or other quick info -->
-                                
-                                    <span class="recipe-card-type">Plat</span>
-                                
-                            </div>
-                        </a>
-                    </article>
+                  <p class="recipe-card-description">Une quiche Lorraine façon maman (avec tomates !) et rapide à faire.</p>
                 
-                    <article class="recipe-card type-dessert">
-                        <a href="crêpes.html" class="recipe-card-link">
-                            
-                                <div class="recipe-card-image-container">
-                                    <img src="https://img.cuisineaz.com/660x495/2015/01/29/i113699-photo-de-crepe-facile.webp" alt="Photo de Crêpes">
-                                </div>
-                            
-                            <div class="recipe-card-content">
-                                <h3>Crêpes</h3>
-                                
-                                    <p class="recipe-card-description">Les fameuses crêpes de maman</p>
-                                
-                                <!-- Optional: Display type or other quick info -->
-                                
-                                    <span class="recipe-card-type">Dessert</span>
-                                
-                            </div>
-                        </a>
-                    </article>
+                <!-- Optional: Display type or other quick info -->
                 
-            </div>
+                  <span class="recipe-card-type">Plat</span>
+                
+              </div>
+            </a>
+          </article>
         
-    </section>
+          <article class="recipe-card type-dessert">
+            <a href="crêpes.html" class="recipe-card-link">
+              
+                <div class="recipe-card-image-container">
+                  <img src="https://img.cuisineaz.com/660x495/2015/01/29/i113699-photo-de-crepe-facile.webp" alt="Photo de Crêpes">
+                </div>
+              
+              <div class="recipe-card-content">
+                <h3>Crêpes</h3>
+                
+                  <p class="recipe-card-description">Les fameuses crêpes de maman</p>
+                
+                <!-- Optional: Display type or other quick info -->
+                
+                  <span class="recipe-card-type">Dessert</span>
+                
+              </div>
+            </a>
+          </article>
+        
+      </div>
+    
+  </section>
 </main>
 
-<footer class="site-footer">
-    <p>Site fait par ton lapin préféré avec ❤️</p>
+<footer>
+  <p>Site fait par ton lapin préféré avec ❤️</p>
 </footer>
 
-<a href="new_recipe.html" class="fab-add-recipe" title="Ajouter une nouvelle recette"
+<a href="new_recipe.html" class="new-recipe-button" title="Ajouter une nouvelle recette"
    aria-label="Ajouter une nouvelle recette">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M8 12h8"/>
-        <path d="M12 8v8"/>
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M8 12h8"/>
+    <path d="M12 8v8"/>
+  </svg>
 </a>
 
 </body>

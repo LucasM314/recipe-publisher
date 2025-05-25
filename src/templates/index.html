@@ -4,21 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ site_title | default("Recipe Publisher") }}</title>
-  <!-- Link to your main CSS file. Adjust path as needed.
-       This assumes index.html is in the root of your output, and css is in output/css/ -->
-  <link rel="stylesheet" href="css/style_base.css">
-  <link rel="stylesheet" href="css/style_index.css"> <!-- Specific CSS for homepage -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style_index.css">
 </head>
 <body>
-
-<header class="site-header">
+<header>
   <h1>{{ site_title | default("Recipe Publisher") }}</h1>
   <p class="tagline">{{ site_tagline | default("Découvrez nos meilleures recettes, faciles à préparer !") }}</p>
-  <!-- You could add a navigation menu here if you have other pages -->
-  <!-- <nav>
-      <a href="#">Accueil</a>
-      <a href="#">À Propos</a>
-  </nav> -->
 </header>
 
 <main class="homepage-content">
@@ -54,16 +46,16 @@
         {% endfor %}
       </div>
     {% else %}
-      <p class="no-recipes-message">Aucune recette disponible pour le moment. Revenez bientôt !</p>
+      <p class="no-recipes-message">Le grimoire est vide ☹️ Remplis-le en créant une nouvelle recette avec le bouton "+" en bas à droite de la page ! 🧙‍♀️</p>
     {% endif %}
   </section>
 </main>
 
-<footer class="site-footer">
+<footer>
   <p>Site fait par ton lapin préféré avec ❤️</p>
 </footer>
 
-<a href="new_recipe.html" class="fab-add-recipe" title="Ajouter une nouvelle recette"
+<a href="new_recipe.html" class="new-recipe-button" title="Ajouter une nouvelle recette"
    aria-label="Ajouter une nouvelle recette">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

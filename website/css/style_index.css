@@ -1,56 +1,53 @@
-/* static/css/style_index.css */
-
-html {
-  height: 100%;
-}
-
 body {
-  font-family: 'Lato', sans-serif;
-  margin: 0;
-  background-color: #f9f9f9;
-  color: #333;
-
   /* Needed for sticky footer */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+
+  background-color: var(--eggshell);
+  font-family: var(--font1-family), sans-serif;
+  color: var(--umber);
 }
 
-.site-header {
-  background-color: #9a3737d4;
-  color: white;
+h1, h2, h3 {
+  font-family: var(--font2-family), serif;
+}
+
+
+header {
   padding: 20px 40px;
   text-align: center;
+
+  background-color: var(--mulberry);
+  color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.site-header h1 {
-  font-family: 'Lora', serif;
-  margin: 0;
+header h1 {
   font-size: 2.8em;
 }
 
-.site-header .tagline {
-  font-size: 1.1em;
+header .tagline {
   margin-top: 5px;
+
+  font-size: 1.1em;
   opacity: 0.9;
 }
 
+
 .homepage-content {
-  max-width: 1200px;
-  min-width: 80%;
+  min-width: 75%;
   margin: 30px auto;
-  padding: 0 20px;
 
   flex-grow: 1;
 }
 
 .recipe-gallery h2 {
-  font-family: 'Lora', serif;
+  margin-bottom: 30px;
+
   text-align: center;
   font-size: 2.2em;
-  color: #333;
-  margin-bottom: 30px;
+  color: var(--soot);
 }
 
 .recipe-grid {
@@ -65,8 +62,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden; /* To contain image border-radius if needed */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  display: flex; /* To make the link fill the card */
-  flex-direction: column;
 }
 
 .recipe-card:hover {
@@ -75,17 +70,18 @@ body {
 }
 
 .recipe-card-link {
+  height: 100%; /* Make link fill the card */
+
+  display: block;
+
+  /* Remove default link style (underlined blue text) */
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* Make link fill the card */
 }
 
 .recipe-card-image-container {
-  width: 100%;
   height: 200px; /* Fixed height for image container */
-  overflow: hidden;
+  overflow: hidden; /* Hide overflow for image scaling */
 }
 
 .recipe-card-image-container img {
@@ -100,50 +96,51 @@ body {
 }
 
 .recipe-card-image-placeholder {
-  width: 100%;
   height: 200px;
-  background-color: #e0e0e0;
+
+  /* Center text */
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background-color: var(--lightgrey);
   color: #777;
   font-style: italic;
 }
 
 .recipe-card-content {
   padding: 15px;
+
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .recipe-card-content h3 {
-  font-family: 'Lora', serif;
+  font-family: var(--font2-family), serif;
   font-size: 1.4em;
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #555;
+  font-weight: normal;
+  color: var(--mulberry);
 }
 
 .recipe-card-description {
   font-size: 0.9em;
-  line-height: 1.5;
-  margin-bottom: 10px;
   flex-grow: 1; /* Takes up available space */
 }
 
 .recipe-card-type {
-  display: inline-block;
-  background-color: #e8f0fe;
-  color: #4a7c59;
   padding: 3px 8px;
+  margin-top: auto; /* Push to bottom if description is short */
+
+  align-self: flex-start;
+
+  background-color: #e8f0fe;
   border-radius: 4px;
   font-size: 0.8em;
   font-weight: bold;
-  align-self: flex-start;
-  margin-top: auto; /* Push to bottom if description is short */
+  color: #4a7c59;
 }
 
-/* Example type-specific styling for card badges */
 .recipe-card.type-dessert .recipe-card-type {
   background-color: #ffe8f0;
   color: #d2691e;
@@ -155,61 +152,56 @@ body {
 }
 
 .no-recipes-message {
-  text-align: center;
-  font-size: 1.1em;
-  color: #777;
   padding: 40px 0;
-}
 
-.site-footer {
   text-align: center;
-  padding: 20px;
-  background-color: #333;
-  color: #ccc;
-  margin-top: 40px;
-  font-size: 0.9em;
+  font-size: 1.4em;
 }
 
-.fab-add-recipe {
-  position: fixed; /* Le rend flottant par rapport au viewport */
-  bottom: 30px; /* Distance du bas */
-  right: 30px; /* Distance de la droite */
-  z-index: 999; /* S'assurer qu'il est au-dessus de la plupart des autres contenus */
+footer {
+  padding: 20px;
+  margin-top: 40px;
 
+  background-color: #333;
+  text-align: center;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.new-recipe-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999; /* Ensure it is above other elements */
+
+  /* Center button icon */
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 60px; /* Taille du bouton */
+  width: 60px;
   height: 60px;
-  /* padding: 15px; -- Si vous voulez contrôler la taille de l'icône via le padding du bouton */
-  box-sizing: border-box;
-
-  background-color: var(--DarkRaspberry, #8B1A3F); /* Couleur distinctive, ex: DarkRaspberry */
-  color: white; /* Pour l'icône SVG si stroke="currentColor" */
-  border: none;
-  border-radius: 50%; /* Pour un bouton parfaitement rond */
+  background-color: var(--mulberry);
+  color: white; /* SVG icon color because stroke="currentColor" */
+  border-radius: 50%; /* Round button */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  text-decoration: none;
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.fab-add-recipe:hover,
-.fab-add-recipe:focus {
-  background-color: hsl(332, 61%, 25%); /* Version plus foncée de DarkRaspberry */
-  transform: scale(1.05) translateY(-2px); /* Léger agrandissement et soulèvement */
+.new-recipe-button:hover,
+.new-recipe-button:focus {
+  background-color: hsl(332, 61%, 25%); /* Darker mulberry */
+  transform: scale(1.10);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   outline: none;
 }
 
-.fab-add-recipe:active {
+.new-recipe-button:active {
   transform: scale(1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.fab-add-recipe svg {
-  width: 28px; /* Taille de l'icône à l'intérieur du bouton */
-  height: 28px; /* Ajustez pour qu'elle soit bien proportionnée dans le cercle */
-  /* stroke: currentColor; -- est déjà sur la balise SVG */
+.new-recipe-button svg {
+  width: 28px;
+  height: 28px;
 }

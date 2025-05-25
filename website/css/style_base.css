@@ -1,61 +1,15 @@
-/* Import local fonts */
-@font-face {
-  font-family: 'Outfit';
-  src: url('../fonts/outfit/Outfit-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 900; /* Plage de variation */
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Outfit';
-  src: url('../fonts/outfit/static/Outfit-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Outfit';
-  src: url('../fonts/outfit/static/Outfit-SemiBold.ttf') format('truetype');
-  font-weight: 600; /* Le style original utilise 600 pour certains éléments */
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Young Serif';
-  src: url('../fonts/young-serif/YoungSerif-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
-  --Nutmeg: hsl(14, 45%, 36%);
-  --DarkRaspberry: hsl(332, 51%, 32%);
-
-  --White: hsl(0, 0%, 100%);
-  --Eggshell: hsl(30, 54%, 90%);
-  --LightGrey: hsl(30, 18%, 87%);
-  --WengeBrown: hsl(30, 10%, 34%);
-  --DarkCharcoal: hsl(24, 5%, 18%);
-  --RoseWhite: hsl(330, 100%, 98%);
-
-  --font1-family: "Outfit", sans-serif;
-  --font2-family: "Young Serif", serif;
-
   --page-content-max-width: 720px;
 }
 
 body {
-  background-color: var(--Eggshell);
+  background-color: var(--eggshell);
   font-family: var(--font1-family), serif;
-  color: var(--WengeBrown);
-  line-height: 1.4;
+  color: var(--umber);
+}
+
+h1, h2, h3 {
+  font-family: var(--font2-family), serif;
 }
 
 ul, ol {
@@ -77,7 +31,7 @@ ul, ol {
   display: flex;
   flex-direction: column;
 
-  background-color: var(--White);
+  background-color: white;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
@@ -91,9 +45,8 @@ ul, ol {
 }
 
 .recipe-header-container h1 {
-  font-family: var(--font2-family), serif;
   font-size: 2.5em;
-  color: var(--DarkCharcoal)
+  color: var(--soot)
 }
 
 .page-actions {
@@ -169,17 +122,16 @@ ul, ol {
 
   flex: 1;
 
-  background-color: var(--RoseWhite);
-  border: 1px solid var(--LightGrey);
+  background-color: var(--rosewhite);
+  border: 1px solid var(--lightgrey);
   border-radius: 8px;
 }
 
 .durations-container h3, .utensils-container h3 {
   margin-bottom: 0.5em;
 
-  font-family: var(--font2-family), serif;
   font-size: 1.4em;
-  color: var(--DarkRaspberry);
+  color: var(--mulberry);
 }
 
 .durations-list, .utensils-list {
@@ -192,10 +144,9 @@ h2 {
   margin-top: 15px;
   margin-bottom: 15px;
 
-  font-family: var(--font2-family), serif;
   font-weight: 400;
   font-size: 1.8em;
-  color: var(--Nutmeg);
+  color: var(--nutmeg);
 }
 
 .ingredients-list, .instruction-list {
@@ -204,7 +155,7 @@ h2 {
 
 .ingredients-list > li::marker, .instruction-list > li::marker {
   font-weight: bold;
-  color: var(--Nutmeg);
+  color: var(--nutmeg);
 }
 
 .instruction-list > li {
@@ -213,7 +164,7 @@ h2 {
 }
 
 .separation-line {
-  border-top: 1px solid var(--LightGrey);
+  border-top: 1px solid var(--lightgrey);
   margin: 8px 0;
 }
 
