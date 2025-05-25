@@ -51,51 +51,42 @@
             </div>
 
             {% if recipe.description %}
-                <p>{{ recipe.description }}</p>
+                <p class="recipe-description">{{ recipe.description }}</p>
             {% endif %}
 
-            <div class="preparation-and-utensils-wrapper">
-                {# Section Durées (Preparation time) #}
+            <div class="durations-and-utensils-container">
+                {# Durations section (Preparation time) #}
                 {% if recipe.durations %}
-                    {% set has_any_duration = false %}
-                    {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}
-                        {% set has_any_duration = true %}{% endif %}
-                    {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}
-                        {% set has_any_duration = true %}{% endif %}
-                    {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}
-                        {% set has_any_duration = true %}{% endif %}
-                    {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}
-                        {% set has_any_duration = true %}{% endif %}
+                    {% set has_any_duration = recipe.durations.total|trim != "" or
+                          recipe.durations.preparation|trim != "" or
+                          recipe.durations.cooking|trim != "" or
+                          recipe.durations.rest|trim != "" %}
 
                     {% if has_any_duration %}
-                        <div class="preparation-container">
+                        <div class="durations-container">
                             <h3>Temps de préparation</h3>
-                            <ul class="preparation-list">
-                                {% if recipe.durations.total and recipe.durations.total|trim != "" and recipe.durations.total != "N/A" %}
-                                    <li><span>Total :</span> {{ recipe.durations.total }}</li>
-                                {% endif %}
-                                {% if recipe.durations.preparation and recipe.durations.preparation|trim != "" and recipe.durations.preparation != "N/A" %}
-                                    <li><span>Préparation :</span> {{ recipe.durations.preparation }}</li>
-                                {% endif %}
-                                {% if recipe.durations.cooking and recipe.durations.cooking|trim != "" and recipe.durations.cooking != "N/A" %}
-                                    <li><span>Cuisson :</span> {{ recipe.durations.cooking }}</li>
-                                {% endif %}
-                                {% if recipe.durations.rest and recipe.durations.rest|trim != "" and recipe.durations.rest != "N/A" %}
-                                    <li><span>Repos :</span> {{ recipe.durations.rest }}</li>
-                                {% endif %}
+                            <ul class="durations-list">
+                                {% for label, duration in {
+                                    'Total': recipe.durations.total,
+                                    'Préparation': recipe.durations.preparation,
+                                    'Cuisson': recipe.durations.cooking,
+                                    'Repos': recipe.durations.rest
+                                }.items() if duration|trim != "" %}
+                                    <li><b>{{ label }} :</b> {{ duration }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                     {% endif %}
                 {% endif %}
 
-                {# Section Ustensiles #}
-                {% if recipe.utensils and recipe.utensils|length > 0 %}
-                    <div class="utensils-container preparation-container">
+                {# Utensils section #}
+                {% if recipe.utensils %}
+                    <div class="utensils-container durations-container">
                         {# Réutilisation de la classe pour un style similaire #}
                         <h3>Ustensiles</h3>
-                        <ul class="utensils-list preparation-list"> {# Réutilisation de la classe #}
+                        <ul class="utensils-list durations-list"> {# Réutilisation de la classe #}
                             {% for utensil in recipe.utensils %}
-                                <li><span>{{ utensil }}</span></li> {# Les ustensiles sont souvent juste le nom #}
+                                <li>{{ utensil }}</li> {# Les ustensiles sont souvent juste le nom #}
                             {% endfor %}
                         </ul>
                     </div>
@@ -103,33 +94,24 @@
             </div>
 
 
-            {% if recipe.ingredients and recipe.ingredients.list and recipe.ingredients.list|length > 0 %}
+            {% if recipe.ingredients and recipe.ingredients.list %}
                 <h2>Ingrédients</h2>
                 <ul class="ingredients-list">
                     {% for ingredient_item in recipe.ingredients.list %}
-                        <li><span>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</span></li>
-                        {# Si vous voulez la quantité en gras, il faudra structurer différemment le JSON ou le CSS #}
-                        {# Exemple: <li><strong>{{ ingredient_item.quantity }}</strong> {{ ingredient_item.name }}</li> #}
+                        <li>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</li>
                     {% endfor %}
                 </ul>
-                <span class="separation-line"></span> {# Ligne de séparation #}
+                <span class="separation-line"></span>
             {% endif %}
 
 
-            {% if recipe.instructions and recipe.instructions|length > 0 %}
+            {% if recipe.instructions %}
                 <h2>Instructions</h2>
                 <ol class="instruction-list">
                     {% for step in recipe.instructions %}
-                        <li>
-                            {# Le style original avait un titre d'étape puis le texte. #}
-                            {# Si vos instructions sont juste du texte, c'est plus simple. #}
-                            {# Si vous avez une structure "TitreEtape: TexteEtape", il faudra adapter le JSON et ici. #}
-                            <span>{{ step }}</span> {# Affichage direct de l'étape #}
-                        </li>
+                        <li>{{ step }}</li>
                     {% endfor %}
                 </ol>
-                {# Pas de section Nutrition demandée #}
-                <!-- <span class="separation-line"></span> --> {# Ligne de séparation si besoin avant le footer #}
             {% endif %}
 
             {% if recipe.image_path %}
@@ -148,3 +130,4 @@
 </footer>
 </body>
 </html>
+
