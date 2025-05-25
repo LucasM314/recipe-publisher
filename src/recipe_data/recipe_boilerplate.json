@@ -4,10 +4,10 @@
     "description": "Description de la recette.",
     "image_filename": "https://example.com/path/to/image.jpg",
     "durations": {
-      "total": "...", // e.g., "1h 30min"
-      "preparation": "...", // e.g., "30min"
-      "cooking": "...", // e.g., "1h"
-      "rest": "..." // e.g., "2h" or "N/A"
+      "total": "", // e.g., "1h 30min"
+      "preparation": "", // e.g., "30min"
+      "cooking": "", // e.g., "1h"
+      "rest": "" // e.g., "2h"
     },
     "utensils": [
       "Nom de l'ustensile 1",
