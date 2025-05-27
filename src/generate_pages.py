@@ -234,6 +234,9 @@ async def main():  # Changed to async main
 
     # Launch Playwright browser once for all PDF generations
     async with async_playwright() as p:
+        # Firefox is more accurate for PDF generation, but PDF generation is only
+        # supported for Headless Chromium.
+        # Relevant bugzilla ticket: bugzilla.mozilla.org/show_bug.cgi?id=1407238
         browser = await p.chromium.launch(headless=True)  # Explicitly headless
 
         for i, recipe_data in enumerate(all_recipes_data):
