@@ -4,279 +4,67 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ajouter une Recette - {{ site_title | default("Le Grimoire de Véro") }}</title>
+  <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style_base.css">
-  <style>
-    /* ... (Styles body, .form-container, h1, label, input, textarea, button[type="submit"], .section, .section-header, .action-list-button, .list-item, #instructionsList, .instruction-item::before inchangés) ... */
-    body {
-      padding-top: 80px;
-      margin: 0;
-    }
-
-    .form-container {
-      background-color: var(--White, white);
-      padding: 20px 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 800px;
-      margin: 0 auto 40px auto;
-    }
-
-    .form-container h1 {
-      font-family: var(--font2-family, 'Young Serif', serif);
-      color: var(--soot, black);
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2.2em;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: var(--umber);
-    }
-
-    input[type="text"], input[type="url"], textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border-radius: 4px;
-      border: 1px solid var(--lightgrey, #ccc);
-      box-sizing: border-box;
-      font-size: 1rem;
-      font-family: var(--font1-family);
-      line-height: 1.5;
-    }
-
-    textarea {
-      min-height: 100px;
-    }
-
-    button[type="submit"] {
-      background-color: var(--nutmeg, #5cb85c);
-      color: white;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 25px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 40px;
-    }
-
-    button[type="submit"]:hover {
-      opacity: 0.85;
-    }
-
-    .section {
-      border: 1px solid var(--lightgrey, #eee);
-      padding: 20px;
-      margin-top: 25px;
-      border-radius: 8px;
-      background-color: var(--rosewhite, #fdf6f8);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .section-header h3 {
-      margin: 0;
-      color: var(--mulberry, #333);
-      font-family: var(--font2-family);
-      font-size: 1.3em;
-    }
-
-    .action-list-button {
-      background-color: transparent;
-      border: 1px solid transparent;
-      padding: 0;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .action-list-button svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    .action-list-button.add-item-btn {
-      stroke: var(--nutmeg, green);
-    }
-
-    .action-list-button.add-item-btn:hover, .action-list-button.add-item-btn:focus {
-      background-color: hsla(90, 60%, 50%, 0.15);
-      outline: none;
-    }
-
-    .action-list-button.remove-item-btn {
-      stroke: var(--mulberry, red);
-      margin-left: 8px;
-      align-self: center;
-    }
-
-    .action-list-button.remove-item-btn:hover, .action-list-button.remove-item-btn:focus {
-      background-color: hsla(330, 70%, 50%, 0.15);
-      outline: none;
-    }
-
-    .list-item {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-
-    .list-item input, .list-item textarea {
-      flex-grow: 1;
-    }
-
-    #instructionsList {
-      counter-reset: instruction-counter;
-      padding-left: 0;
-      list-style-type: none;
-    }
-
-    .instruction-item {
-      position: relative;
-      padding-left: 35px;
-    }
-
-    .instruction-item::before {
-      counter-increment: instruction-counter;
-      content: counter(instruction-counter) ". ";
-      position: absolute;
-      left: 5px;
-      top: 10px;
-      font-weight: bold;
-      color: var(--nutmeg, #80482D);
-      font-family: var(--font1-family);
-    }
-
-    .output-container {
-      margin-top: 0;
-    }
-
-    .output-container h3 {
-      margin-bottom: 10px;
-      font-family: var(--font2-family);
-      color: var(--soot);
-    }
-
-    /* NOUVEAU: Conteneur pour la textarea JSON et son bouton copier */
-    .json-textarea-wrapper {
-      position: relative; /* Pour positionner le bouton copier absolument à l'intérieur */
-      margin-top: 10px; /* Espace après le h3 "JSON Généré" */
-    }
-
-    #jsonOutput {
-      width: 100%;
-      min-height: 400px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      background-color: #f8f9fa;
-      border: 1px dashed #ccc;
-      padding: 15px;
-      padding-top: 45px; /* NOUVEAU: Espace en haut pour le bouton copier */
-      border-radius: 4px;
-      font-size: 0.9em;
-      line-height: 1.4;
-      resize: vertical;
-    }
-
-    /* NOUVEAU: Style pour le bouton copier */
-    .copy-json-button {
-      position: absolute;
-      top: 8px; /* Ajustez pour le positionnement vertical */
-      right: 8px; /* Ajustez pour le positionnement horizontal */
-      background-color: var(--lightgrey, #ddd);
-      border: 1px solid var(--umber, #bbb);
-      color: var(--umber); /* Pour le texte/stroke de l'icône */
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8em;
-      font-family: var(--font1-family);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: background-color 0.2s ease;
-    }
-
-    .copy-json-button:hover {
-      background-color: hsl(30, 18%, 77%); /* LightGrey un peu plus foncé */
-    }
-
-    .copy-json-button svg {
-      width: 16px; /* Taille de l'icône copier */
-      height: 16px;
-      stroke: currentColor; /* Utilise la 'color' du bouton */
-    }
-
-    .copy-json-button .copy-feedback { /* Pour le message "Copié !" */
-      margin-left: 5px;
-      font-style: italic;
-      font-size: 0.9em;
-    }
-
-  </style>
+  <link rel="stylesheet" href="css/new_recipe.css">
 </head>
+
 <body>
-<div class="page-actions">
-  <a href="index.html" class="action-button home-button" aria-label="Retour à l'accueil" title="Retour à l'accueil">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
-      <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    </svg>
-  </a>
-</div>
+<div class="page-container">
+  <div class="header-container">
+    <h1>Ajouter une nouvelle recette</h1>
+    <div class="page-actions">
+      {# Go back home button #}
+      <a href="index.html" class="action-button home-button" aria-label="Retour à l'accueil" title="Retour à l'accueil">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+          <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
 
-<div class="form-container">
-  <h1>Ajouter une Nouvelle Recette</h1>
-  <form id="recipeForm">
-    <!-- ... (Tout le formulaire jusqu'au bouton "Générer le JSON" reste inchangé) ... -->
-    <label for="name">Nom de la recette :</label><input type="text" id="name" name="name" required>
-    <label for="type">Type de plat :</label><select id="type" name="type">
-    <option value="default" disabled selected>Choisir un type...</option>
-    <option value="entree">Entrée</option>
-    <option value="plat">Plat</option>
-    <option value="dessert">Dessert</option>
-    <option value="accompagnement">Accompagnement</option>
-    <option value="autre">Autre</option>
-  </select>
-    <label for="description">Description :</label><textarea id="description" name="description"></textarea>
-    <label for="image_filename">Nom du fichier image :</label><input type="text" id="image_filename"
-                                                                     name="image_filename"
-                                                                     placeholder="Pour une image locale (dans source_recipe_images)">
-    <label for="image_url">OU URL de l'image :</label><input type="url" id="image_url" name="image_url"
-                                                             placeholder="https://example.com/image.jpg">
-    <div class="section"><h3>Durées</h3><label for="total_duration">Total :</label><input type="text"
-                                                                                          id="total_duration"
-                                                                                          name="total_duration"
-                                                                                          placeholder="ex: 1h 30min"><label
-            for="prep_duration">Préparation :</label><input type="text" id="prep_duration" name="prep_duration"
-                                                            placeholder="ex: 30min"><label for="cook_duration">Cuisson
-      :</label><input type="text" id="cook_duration" name="cook_duration" placeholder="ex: 1h"><label
-            for="rest_duration">Repos :</label><input type="text" id="rest_duration" name="rest_duration"
-                                                      placeholder="ex: 2h ou 1h30"></div>
+  <form id="recipe-form">
+    <label for="name">Nom de la recette :</label>
+    <input type="text" id="name" name="name" required>
 
-    <div class="section">
-      <div class="section-header"><h3>Ingrédients</h3>
-        <button type="button" class="action-list-button add-item-btn" onclick="addIngredient()"
+    <label for="type">Type de plat :</label>
+    <select id="type" name="type">
+      <option value="default" disabled selected>Choisir un type...</option>
+      <option value="entree">Entrée</option>
+      <option value="plat">Plat</option>
+      <option value="dessert">Dessert</option>
+      <option value="accompagnement">Accompagnement</option>
+      <option value="autre">Autre</option>
+    </select>
+
+    <label for="description">Description :</label>
+    <textarea id="description" name="description"></textarea>
+
+    <label for="image_filename">Nom du fichier image :</label>
+    <input type="text" id="image_filename" name="image_filename"
+           placeholder="Pour une image locale (dans source_recipe_images)">
+
+    <label for="image_url">OU URL de l'image :</label>
+    <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg">
+
+    <section>
+      <h3>Durées</h3>
+      <label for="total_duration">Total :</label>
+      <input type="text" id="total_duration" name="total_duration" placeholder="ex: 1h 30min">
+      <label for="preparation_duration">Préparation :</label>
+      <input type="text" id="preparation_duration" name="preparation_duration" placeholder="ex: 30min">
+      <label for="cook_duration">Cuisson :</label>
+      <input type="text" id="cook_duration" name="cook_duration" placeholder="ex: 1h">
+      <label for="rest_duration">Repos :</label>
+      <input type="text" id="rest_duration" name="rest_duration" placeholder="ex: 2h ou 1h30">
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h3>Ingrédients</h3>
+        <button type="button" class="action-list-button add-item-button" onclick="addIngredient()"
                 title="Ajouter un ingrédient">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -286,14 +74,15 @@
           </svg>
         </button>
       </div>
-      <label for="serves">Pour combien de personnes/parts :</label><input type="text" id="serves" name="serves"
-                                                                          placeholder="ex: 4 personnes, 6 parts">
-      <div id="ingredientsList"></div>
-    </div>
+      <label for="serves">Pour combien de personnes/parts :</label>
+      <input type="text" id="serves" name="serves" placeholder="ex: 4 personnes, 6 parts">
+      <div id="ingredients-list"></div>
+    </section>
 
-    <div class="section">
-      <div class="section-header"><h3>Ustensiles</h3>
-        <button type="button" class="action-list-button add-item-btn" onclick="addUtensil()"
+    <section>
+      <div class="section-header">
+        <h3>Ustensiles</h3>
+        <button type="button" class="action-list-button add-item-button" onclick="addUtensil()"
                 title="Ajouter un ustensile">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -303,13 +92,13 @@
           </svg>
         </button>
       </div>
-      <div id="utensilsList"></div>
-    </div>
+      <div id="utensils-list"></div>
+    </section>
 
-    <div class="section">
+    <section>
       <div class="section-header">
         <h3>Instructions</h3>
-        <button type="button" class="action-list-button add-item-btn" onclick="addInstruction()"
+        <button type="button" class="action-list-button add-item-button" onclick="addInstruction()"
                 title="Ajouter une étape">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -319,19 +108,18 @@
           </svg>
         </button>
       </div>
-      <div id="instructionsList"></div>
-    </div>
+      <div id="instructions-list"></div>
+    </section>
 
-    <br>
     <button type="submit">Générer le JSON</button>
   </form>
 
-  <div class="output-container">
+  <div class="json-output-container">
     <h3>JSON Généré (Copier ce texte) :</h3>
-    <!-- NOUVEAU: Wrapper pour la textarea et le bouton copier -->
-    <div class="json-textarea-wrapper">
-      <textarea id="jsonOutput" readonly></textarea>
-      <button type="button" class="copy-json-button" id="copyJsonBtn" title="Copier le JSON dans le presse-papiers">
+    <div class="json-textarea-container">
+      <textarea id="json-output" readonly></textarea>
+      <button type="button" class="copy-json-button" id="copy-json-button"
+              title="Copier le JSON dans le presse-papiers">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
@@ -340,149 +128,14 @@
           <path d="M21 14H11"/>
           <path d="m15 10-4 4 4 4"/>
         </svg>
-        Copier <span class="copy-feedback" id="copyFeedback"></span>
+        Copier <span class="copy-feedback" id="copy-feedback"></span>
       </button>
     </div>
   </div>
 </div>
 
-<script>
-    // ... (JavaScript pour addIngredient, addUtensil, addInstruction, createRemoveButton, et la soumission du formulaire reste identique) ...
-    let ingredientCount = 0;
-    let utensilCount = 0;
-    let jsInstructionCounter = 0;
 
-    const svgIconMinus = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>`;
-
-    function createRemoveButton() {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'action-list-button remove-item-btn';
-        button.title = 'Retirer cet élément';
-        button.innerHTML = svgIconMinus;
-        button.onclick = function () {
-            this.closest('.list-item').remove();
-        };
-        return button;
-    }
-
-    function addIngredient() { /* ... inchangé ... */
-        ingredientCount++;
-        const div = document.createElement('div');
-        div.className = 'list-item ingredient-item';
-        div.innerHTML = `
-                <input type="text" name="ingredient_quantity_${ingredientCount}" placeholder="Quantité (ex: 200g, 1)">
-                <input type="text" name="ingredient_name_${ingredientCount}" placeholder="Nom de l'ingrédient">
-            `;
-        div.appendChild(createRemoveButton());
-        document.getElementById('ingredientsList').appendChild(div);
-    }
-
-    function addUtensil() { /* ... inchangé ... */
-        utensilCount++;
-        const div = document.createElement('div');
-        div.className = 'list-item utensil-item';
-        div.innerHTML = `
-                <input type="text" name="utensil_name_${utensilCount}" placeholder="Nom de l'ustensile">
-            `;
-        div.appendChild(createRemoveButton());
-        document.getElementById('utensilsList').appendChild(div);
-    }
-
-    function addInstruction() { /* ... inchangé ... */
-        jsInstructionCounter++;
-        const div = document.createElement('div');
-        div.className = 'list-item instruction-item';
-        div.innerHTML = `
-                <textarea name="instruction_step_${jsInstructionCounter}" placeholder="Description de l'étape"></textarea>
-            `;
-        div.appendChild(createRemoveButton());
-        document.getElementById('instructionsList').appendChild(div);
-    }
-
-    addIngredient();
-    addUtensil();
-    addInstruction();
-
-    document.getElementById('recipeForm').addEventListener('submit', function (event) { /* ... inchangé ... */
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
-        const recipeJson = {
-            name: data.name || "", type: data.type === "default" ? "" : data.type,
-            description: data.description || "",
-            image_filename: data.image_filename || (data.image_url ? data.image_url : ""),
-            durations: {
-                total: data.total_duration || "", preparation: data.prep_duration || "",
-                cooking: data.cook_duration || "", rest: data.rest_duration || ""
-            },
-            ingredients: {serves: data.serves || "", list: []},
-            utensils: [], instructions: []
-        };
-        document.querySelectorAll('#ingredientsList .list-item').forEach(item => {
-            const q = item.querySelector('input[name^="ingredient_quantity_"]');
-            const n = item.querySelector('input[name^="ingredient_name_"]');
-            if ((n && n.value.trim() !== "") || (q && q.value.trim() !== "")) {
-                recipeJson.ingredients.list.push({quantity: q ? q.value.trim() : "", name: n ? n.value.trim() : ""});
-            }
-        });
-        document.querySelectorAll('#utensilsList .list-item input[name^="utensil_name_"]').forEach(i => {
-            if (i.value.trim() !== "") recipeJson.utensils.push(i.value.trim());
-        });
-        document.querySelectorAll('#instructionsList .list-item textarea[name^="instruction_step_"]').forEach(textarea => {
-            if (textarea.value.trim() !== "") recipeJson.instructions.push(textarea.value.trim());
-        });
-        for (const key in recipeJson.durations) if (!recipeJson.durations[key].trim()) recipeJson.durations[key] = "";
-        if (!recipeJson.image_filename) recipeJson.image_filename = "";
-        document.getElementById('jsonOutput').value = JSON.stringify(recipeJson, null, 2);
-    });
-
-    // NOUVEAU: JavaScript pour le bouton Copier
-    const copyButton = document.getElementById('copyJsonBtn');
-    const jsonTextarea = document.getElementById('jsonOutput');
-    const copyFeedback = document.getElementById('copyFeedback');
-
-    copyButton.addEventListener('click', function () {
-        if (!jsonTextarea.value) {
-            copyFeedback.textContent = 'Rien à copier !';
-            setTimeout(() => {
-                copyFeedback.textContent = '';
-            }, 2000);
-            return;
-        }
-        jsonTextarea.select(); // Sélectionne le contenu de la textarea
-        jsonTextarea.setSelectionRange(0, 99999); // Pour les appareils mobiles
-
-        try {
-            const successful = document.execCommand('copy'); // Ancienne méthode, mais large support
-            if (successful) {
-                copyFeedback.textContent = 'Copié !';
-            } else {
-                // Essayer avec l'API Clipboard plus moderne si execCommand échoue ou n'est pas supporté
-                navigator.clipboard.writeText(jsonTextarea.value).then(function () {
-                    copyFeedback.textContent = 'Copié !';
-                }, function (err) {
-                    copyFeedback.textContent = 'Erreur copie';
-                    console.error('Async: Could not copy text: ', err);
-                });
-            }
-        } catch (err) {
-            navigator.clipboard.writeText(jsonTextarea.value).then(function () {
-                copyFeedback.textContent = 'Copié !';
-            }, function (err) {
-                copyFeedback.textContent = 'Erreur copie';
-                console.error('Fallback Async: Could not copy text: ', err);
-            });
-        }
-
-        // Enlever le message après quelques secondes
-        setTimeout(() => {
-            copyFeedback.textContent = '';
-        }, 2000);
-
-        window.getSelection().removeAllRanges(); // Désélectionne le texte
-    });
-
-</script>
+<script src="js/new_recipe.js"></script>
 </body>
+
 </html>

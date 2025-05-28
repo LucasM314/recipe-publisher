@@ -1,0 +1,223 @@
+body {
+  padding-top: 80px;
+}
+
+.page-container {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+}
+
+.page-container h1 {
+  font-family: var(--font2-family, 'Young Serif', serif);
+  color: var(--soot, black);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2em;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--umber);
+}
+
+input[type="text"], input[type="url"], textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--lightgrey, #ccc);
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: var(--font1-family);
+  line-height: 1.5;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+button[type="submit"] {
+  background-color: var(--nutmeg, #5cb85c);
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+button[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+.section {
+  border: 1px solid var(--lightgrey, #eee);
+  padding: 20px;
+  margin-top: 25px;
+  border-radius: 8px;
+  background-color: var(--rosewhite, #fdf6f8);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: var(--mulberry, #333);
+  font-family: var(--font2-family);
+  font-size: 1.3em;
+}
+
+.action-list-button {
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.action-list-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.action-list-button.add-item-button {
+  stroke: var(--nutmeg, green);
+}
+
+.action-list-button.add-item-button:hover, .action-list-button.add-item-button:focus {
+  background-color: hsla(90, 60%, 50%, 0.15);
+  outline: none;
+}
+
+.action-list-button.remove-item-btn {
+  stroke: var(--mulberry, red);
+  margin-left: 8px;
+  align-self: center;
+}
+
+.action-list-button.remove-item-btn:hover, .action-list-button.remove-item-btn:focus {
+  background-color: hsla(330, 70%, 50%, 0.15);
+  outline: none;
+}
+
+.list-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.list-item input, .list-item textarea {
+  flex-grow: 1;
+}
+
+#instructions-list {
+  counter-reset: instruction-counter;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.instruction-item {
+  position: relative;
+  padding-left: 35px;
+}
+
+.instruction-item::before {
+  counter-increment: instruction-counter;
+  content: counter(instruction-counter) ". ";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  font-weight: bold;
+  color: var(--nutmeg, #80482D);
+  font-family: var(--font1-family);
+}
+
+.json-output-container {
+  margin-top: 0;
+}
+
+.json-output-container h3 {
+  margin-bottom: 10px;
+  font-family: var(--font2-family);
+  color: var(--soot);
+}
+
+/* NOUVEAU: Conteneur pour la textarea JSON et son bouton copier */
+.json-textarea-container {
+  position: relative; /* Pour positionner le bouton copier absolument à l'intérieur */
+  margin-top: 10px; /* Espace après le h3 "JSON Généré" */
+}
+
+#json-output {
+  width: 100%;
+  min-height: 400px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  background-color: #f8f9fa;
+  border: 1px dashed #ccc;
+  padding: 15px;
+  padding-top: 45px; /* NOUVEAU: Espace en haut pour le bouton copier */
+  border-radius: 4px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+/* NOUVEAU: Style pour le bouton copier */
+.copy-json-button {
+  position: absolute;
+  top: 8px; /* Ajustez pour le positionnement vertical */
+  right: 8px; /* Ajustez pour le positionnement horizontal */
+  background-color: var(--lightgrey, #ddd);
+  border: 1px solid var(--umber, #bbb);
+  color: var(--umber); /* Pour le texte/stroke de l'icône */
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-family: var(--font1-family);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.copy-json-button:hover {
+  background-color: hsl(30, 18%, 77%); /* LightGrey un peu plus foncé */
+}
+
+.copy-json-button svg {
+  width: 16px; /* Taille de l'icône copier */
+  height: 16px;
+  stroke: currentColor; /* Utilise la 'color' du bouton */
+}
+
+.copy-json-button .copy-feedback { /* Pour le message "Copié !" */
+  margin-left: 5px;
+  font-style: italic;
+  font-size: 0.9em;
+}
