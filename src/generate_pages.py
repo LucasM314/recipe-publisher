@@ -21,10 +21,12 @@ TEMPLATE_NEW_RECIPE_FILENAME = "new_recipe.html"
 OUTPUT_DIR = SRC_ROOT.parent / "website"
 OUTPUT_RECIPE_IMAGES_DIR = OUTPUT_DIR / "recipe_images"
 OUTPUT_CSS_DIR = OUTPUT_DIR / "css"
+OUTPUT_JS_DIR = OUTPUT_DIR / "js"
 OUTPUT_FONTS_DIR = OUTPUT_DIR / "fonts"
 OUTPUT_PDF_DIR = OUTPUT_DIR / "pdf_recipes"
 
 SOURCE_STATIC_CSS_DIR = SRC_ROOT / "static" / "css"
+SOURCE_STATIC_JS_DIR = SRC_ROOT / "static" / "js"
 SOURCE_STATIC_FONTS_DIR = SRC_ROOT / "static" / "fonts"
 
 
@@ -131,28 +133,21 @@ def needs_de_separator(quantity_str):
         return True
 
 
+def copy_asset_folder(source_dir_path: Path, dest_dir_path: Path, asset_name: str = ""):
+    if dest_dir_path.exists():
+        shutil.rmtree(dest_dir_path)
+    dest_dir_path.mkdir(parents=True, exist_ok=True)
+    if source_dir_path.exists() and source_dir_path.is_dir():
+        shutil.copytree(source_dir_path, dest_dir_path, dirs_exist_ok=True)
+        print(f"  {asset_name} files copied to: {dest_dir_path.relative_to(SRC_ROOT.parent)}")
+    else:
+        print(f"Warning: Source {asset_name} directory '{source_dir_path}' not found.")
+
 def copy_static_assets():
     print("\nCopying static assets...")
-    # CSS
-    if OUTPUT_CSS_DIR.exists():
-        shutil.rmtree(OUTPUT_CSS_DIR)
-    OUTPUT_CSS_DIR.mkdir(parents=True, exist_ok=True)
-    if SOURCE_STATIC_CSS_DIR.exists() and SOURCE_STATIC_CSS_DIR.is_dir():
-        shutil.copytree(SOURCE_STATIC_CSS_DIR, OUTPUT_CSS_DIR, dirs_exist_ok=True)
-        print(f"  CSS files copied to: {OUTPUT_CSS_DIR.relative_to(SRC_ROOT.parent)}")
-    else:
-        print(f"Warning: Source CSS directory '{SOURCE_STATIC_CSS_DIR}' not found.")
-
-    # Fonts
-    if OUTPUT_FONTS_DIR.exists():
-        shutil.rmtree(OUTPUT_FONTS_DIR)
-    OUTPUT_FONTS_DIR.mkdir(parents=True, exist_ok=True)
-    if SOURCE_STATIC_FONTS_DIR.exists() and SOURCE_STATIC_FONTS_DIR.is_dir():
-        shutil.copytree(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, dirs_exist_ok=True)
-        print(f"  Fonts copied to: {OUTPUT_FONTS_DIR.relative_to(SRC_ROOT.parent)}")
-    else:
-        print(f"Warning: Source Fonts directory '{SOURCE_STATIC_FONTS_DIR}' not found.")
-
+    copy_asset_folder(SOURCE_STATIC_CSS_DIR, OUTPUT_CSS_DIR, "CSS")
+    copy_asset_folder(SOURCE_STATIC_JS_DIR, OUTPUT_JS_DIR, "JS")
+    copy_asset_folder(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, "Fonts")
 
 # Renamed and modified for browser reuse and better logging
 async def generate_pdf_from_html_with_browser(
