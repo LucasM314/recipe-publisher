@@ -17,6 +17,21 @@ h1, h2, h3 {
   font-family: var(--font2-family), serif;
 }
 
+h1 {
+  font-size: 2.5em;
+  color: var(--soot);
+}
+
+h2 {
+  font-size: 1.8em;
+  color: var(--nutmeg);
+}
+
+h3 {
+  font-size: 1.4em;
+  color: var(--mulberry);
+}
+
 .page-content-container {
   max-width: 720px;
   width: 100%;
@@ -37,11 +52,6 @@ h1, h2, h3 {
 
   display: flex;
   justify-content: space-between;
-}
-
-.header-container h1 {
-  font-size: 2.5em;
-  color: var(--soot)
 }
 
 .page-actions {
