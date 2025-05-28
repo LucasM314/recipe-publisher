@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ajouter une Recette - {{ site_title | default("Le Grimoire de Véro") }}</title>
   <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/style_base.css">
+  <link rel="stylesheet" href="css/page.css">
   <link rel="stylesheet" href="css/new_recipe.css">
 </head>
 
 <body>
-<div class="page-container">
-  <div class="header-container">
+<div class="page-content-container">
+  <header class="header-container">
     <h1>Ajouter une nouvelle recette</h1>
     <div class="page-actions">
       {# Go back home button #}
@@ -23,7 +23,7 @@
         </svg>
       </a>
     </div>
-  </div>
+  </header>
 
   <form id="recipe-form">
     <label for="name">Nom de la recette :</label>

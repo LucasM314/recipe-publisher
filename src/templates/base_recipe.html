@@ -9,6 +9,7 @@
 
   <!-- Main CSS for a recipe page -->
   <link rel="stylesheet" href="css/reset.css"/>
+  <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="css/style_base.css"/>
 
   <!-- Recipe-type-specific CSS -->
@@ -21,8 +22,7 @@
 </head>
 <body>
 <main>
-  <section class="recipe-page-section">
-    <div class="recipe-page-content-container">
+  <div class="page-content-container">
       <div class="header-container">
         <h1>{{ recipe.name }}</h1>
         <div class="page-actions">
@@ -122,7 +122,6 @@
         <!-- <img src="placeholder.jpg" alt="Pas d'image disponible" /> -->
       {% endif %}
     </div>
-  </section>
 </main>
 
 <footer class="attribution">
