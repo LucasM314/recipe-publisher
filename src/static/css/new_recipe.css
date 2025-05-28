@@ -123,6 +123,12 @@ section {
 }
 
 
+.utensils-section h3, .instructions-section h3 {
+  margin-bottom: 12px;
+}
+
+
+/* ---------- Instructions section ---------- */
 #instructions-list {
   padding-left: 25px;
 }
