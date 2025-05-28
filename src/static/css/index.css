@@ -175,7 +175,7 @@ footer {
   z-index: 999; /* Ensure it is above other elements */
 
   /* Center button icon */
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
