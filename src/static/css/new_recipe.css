@@ -4,204 +4,232 @@
 
 
 label {
-  display: block;
-  margin-top: 15px;
+  display: inline-block;
+
+  margin-top: 12px;
   margin-bottom: 5px;
+
   font-weight: bold;
-  color: var(--umber);
 }
 
-input[type="text"], input[type="url"], textarea, select {
+input, textarea, select {
   width: 100%;
-  padding: 10px;
   margin-bottom: 12px;
+  padding: 10px;
+
+  font-family: "Calibri", serif;
+  border: 1px solid var(--lightgrey);
   border-radius: 4px;
-  border: 1px solid var(--lightgrey, #ccc);
-  box-sizing: border-box;
-  font-size: 1rem;
-  font-family: var(--font1-family);
-  line-height: 1.5;
 }
 
 textarea {
-  min-height: 100px;
+  /*
+  The following calculation returns the height of 2 lines of text (1.5 is the line height,
+  set in reset.css).
+  box-sizing: content-box is necessary to make sure the min-height is applied to the
+  area where text can actually be written (i.e. the content of the textarea), instead of
+  being eaten up by the textarea's padding/border/margin.
+  */
+  box-sizing: content-box;
+  min-height: calc(2 * 1.5em);
+  /* Account for parent padding + textarea border since we're in content-box */
+  max-width: calc(100% - 22px);
+  resize: vertical; /* Allow vertical resizing only */
 }
 
-button[type="submit"] {
-  background-color: var(--nutmeg, #5cb85c);
-  color: white;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 25px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 40px;
-}
 
-button[type="submit"]:hover {
-  opacity: 0.85;
-}
+/* ---------- Section style ---------- */
 
-.section {
-  border: 1px solid var(--lightgrey, #eee);
+section {
+  margin-top: 30px;
   padding: 20px;
-  margin-top: 25px;
+
+  background-color: var(--rosewhite);
+  border: 1px solid var(--lightgrey);
   border-radius: 8px;
-  background-color: var(--rosewhite, #fdf6f8);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
 }
 
-.section-header h3 {
-  margin: 0;
-  color: var(--mulberry, #333);
-  font-family: var(--font2-family);
-  font-size: 1.3em;
-}
 
-.action-list-button {
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: 0;
-  cursor: pointer;
+/* --- List action buttons (add or remove item) --- */
+.list-action-button {
+  /* Center button icon */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  flex-shrink: 0;
+
   width: 36px;
   height: 36px;
+  padding: 0;
+
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 50%; /* Round button */
+  cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.action-list-button svg {
+.list-action-button svg {
   width: 22px;
   height: 22px;
 }
 
-.action-list-button.add-item-button {
-  stroke: var(--nutmeg, green);
+.list-action-button:hover, .list-action-button:focus {
+  outline-style: solid;
+  outline-color: transparent;
 }
 
-.action-list-button.add-item-button:hover, .action-list-button.add-item-button:focus {
-  background-color: hsla(90, 60%, 50%, 0.15);
-  outline: none;
+.list-action-button.add-item-button {
+  color: #0F9D58;
 }
 
-.action-list-button.remove-item-btn {
-  stroke: var(--mulberry, red);
-  margin-left: 8px;
-  align-self: center;
+.list-action-button.add-item-button:hover, .list-action-button.add-item-button:focus {
+  background-color: #80CC3326;
 }
 
-.action-list-button.remove-item-btn:hover, .action-list-button.remove-item-btn:focus {
-  background-color: hsla(330, 70%, 50%, 0.15);
-  outline: none;
+.list-action-button.remove-item-button {
+  color: #DB4437;
+}
+
+.list-action-button.remove-item-button:hover, .list-action-button.remove-item-button:focus {
+  background-color: #D9268026;
+}
+
+
+/* --- List container and items --- */
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .list-item {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
   align-items: center;
+  gap: 10px;
 }
 
-.list-item input, .list-item textarea {
-  flex-grow: 1;
+.list-item > input, .list-item > textarea, .list-item > select {
+  /* We remove the initial bottom margin because the vertical spacing between the
+   list items is already handled by the list container (using flexbox' gap).
+   Also, having no bottom margin makes vertically centering the remove item button easier */
+  margin-bottom: 0;
 }
+
 
 #instructions-list {
-  counter-reset: instruction-counter;
-  padding-left: 0;
-  list-style-type: none;
+  padding-left: 25px;
+}
+
+#instructions-list > li::marker {
+  font-weight: bold;
+  color: var(--nutmeg);
 }
 
 .instruction-item {
-  position: relative;
-  padding-left: 35px;
+  padding-left: 10px;
 }
 
-.instruction-item::before {
-  counter-increment: instruction-counter;
-  content: counter(instruction-counter) ". ";
-  position: absolute;
-  left: 5px;
-  top: 10px;
-  font-weight: bold;
-  color: var(--nutmeg, #80482D);
-  font-family: var(--font1-family);
+.instruction-item > textarea {
+  /*
+  The desired vertical position of the marker is at the top of the item content.
+
+  However, some testing showed that this position depends on the min-height
+  of the textarea. More specifically, the marker appears to be positioned at the
+  center of the textarea's min-height, starting from the top (remark: this is only true
+  if the textarea's min-height is greater than the height of a line of text. Otherwise,
+  the marker is positioned at the top of the textarea, aligned with the textarea's first
+  line of text).
+
+  The min-height of the textarea is previously set to 2 lines of text (see above).
+  We change this to one line height, so that the marker is correctly positioned at the
+  top of the textarea.
+  */
+  min-height: 1.5em;
+  height: calc(3 * 1.5em);
 }
 
-.json-output-container {
-  margin-top: 0;
-}
 
+/* ---------- JSON output section ---------- */
 .json-output-container h3 {
   margin-bottom: 10px;
-  font-family: var(--font2-family);
   color: var(--soot);
 }
 
-/* NOUVEAU: Conteneur pour la textarea JSON et son bouton copier */
 .json-textarea-container {
-  position: relative; /* Pour positionner le bouton copier absolument à l'intérieur */
-  margin-top: 10px; /* Espace après le h3 "JSON Généré" */
+  position: relative; /* To absolute position the copy button inside */
 }
 
 #json-output {
-  width: 100%;
   min-height: 400px;
-  font-family: monospace;
-  white-space: pre-wrap;
+
   background-color: #f8f9fa;
-  border: 1px dashed #ccc;
-  padding: 15px;
-  padding-top: 45px; /* NOUVEAU: Espace en haut pour le bouton copier */
-  border-radius: 4px;
+  font-family: monospace;
   font-size: 0.9em;
+  border: 1px dashed #ccc;
   line-height: 1.4;
-  resize: vertical;
+  white-space: pre-wrap;
 }
 
-/* NOUVEAU: Style pour le bouton copier */
-.copy-json-button {
-  position: absolute;
-  top: 8px; /* Ajustez pour le positionnement vertical */
-  right: 8px; /* Ajustez pour le positionnement horizontal */
-  background-color: var(--lightgrey, #ddd);
-  border: 1px solid var(--umber, #bbb);
-  color: var(--umber); /* Pour le texte/stroke de l'icône */
-  padding: 6px 10px;
+/* --- Generate JSON button --- */
+.generate-json-button {
+  display: block;
+  margin: 35px auto 50px auto; /* Center the button horizontally */
+  padding: 12px 18px;
+
+  background-color: var(--nutmeg);
+  color: white;
+  border-color: transparent;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.8em;
-  font-family: var(--font1-family);
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.generate-json-button:hover {
+  opacity: 0.85;
+}
+
+.generate-json-button:active {
+  background-color: #6a3828;
+  opacity: 1;
+}
+
+
+/* ---------- Copy JSON button ---------- */
+.copy-json-button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  padding: 6px 10px;
+
+  background-color: var(--lightgrey);
+  font-size: 0.8em;
+  border: 1px solid var(--umber);
+  border-radius: 4px;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .copy-json-button:hover {
-  background-color: hsl(30, 18%, 77%); /* LightGrey un peu plus foncé */
+  background-color: #c9bdb1;
+}
+
+.copy-json-button:active {
+  background-color: #dbd3cb;
+  transition: none; /* Disable transition on active state */
 }
 
 .copy-json-button svg {
-  width: 16px; /* Taille de l'icône copier */
+  width: 16px;
   height: 16px;
-  stroke: currentColor; /* Utilise la 'color' du bouton */
-}
-
-.copy-json-button .copy-feedback { /* Pour le message "Copié !" */
-  margin-left: 5px;
-  font-style: italic;
-  font-size: 0.9em;
 }

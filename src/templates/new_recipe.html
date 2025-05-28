@@ -64,7 +64,7 @@
     <section>
       <div class="section-header">
         <h3>Ingrédients</h3>
-        <button type="button" class="action-list-button add-item-button" onclick="addIngredient()"
+        <button type="button" class="list-action-button add-item-button" onclick="addIngredient()"
                 title="Ajouter un ingrédient">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -76,13 +76,13 @@
       </div>
       <label for="serves">Pour combien de personnes/parts :</label>
       <input type="text" id="serves" name="serves" placeholder="ex: 4 personnes, 6 parts">
-      <div id="ingredients-list"></div>
+      <div id="ingredients-list" class="list-container"></div>
     </section>
 
     <section>
       <div class="section-header">
         <h3>Ustensiles</h3>
-        <button type="button" class="action-list-button add-item-button" onclick="addUtensil()"
+        <button type="button" class="list-action-button add-item-button" onclick="addUtensil()"
                 title="Ajouter un ustensile">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -92,13 +92,13 @@
           </svg>
         </button>
       </div>
-      <div id="utensils-list"></div>
+      <div id="utensils-list" class="list-container"></div>
     </section>
 
     <section>
       <div class="section-header">
         <h3>Instructions</h3>
-        <button type="button" class="action-list-button add-item-button" onclick="addInstruction()"
+        <button type="button" class="list-action-button add-item-button" onclick="addInstruction()"
                 title="Ajouter une étape">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -108,10 +108,10 @@
           </svg>
         </button>
       </div>
-      <div id="instructions-list"></div>
+      <ol id="instructions-list" class="list-container native-ordered-list"></ol>
     </section>
 
-    <button type="submit">Générer le JSON</button>
+    <button type="submit" class="generate-json-button">Générer le JSON</button>
   </form>
 
   <div class="json-output-container">
@@ -128,7 +128,7 @@
           <path d="M21 14H11"/>
           <path d="m15 10-4 4 4 4"/>
         </svg>
-        Copier <span class="copy-feedback" id="copy-feedback"></span>
+        Copier
       </button>
     </div>
   </div>
@@ -139,3 +139,4 @@
 </body>
 
 </html>
+
