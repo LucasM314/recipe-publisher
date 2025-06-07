@@ -2,7 +2,7 @@
 
 @page {
   size: A4;
-  margin: 1.5cm; /* Reverted to the previous standard A4 margin */
+  margin: 1.5cm; /* Standard A4 margin */
 }
 
 body {
@@ -17,18 +17,12 @@ body {
 
 /* Hide elements not suitable for print */
 .page-actions,
-.recipe-page-content-container > img, /* Cela cache l'image principale de la recette DANS le contenu */
+.page-content-container > img, /* Cela cache l'image principale de la recette DANS le contenu */
 footer.attribution {
   display: none !important;
 }
 
-.recipe-page-section {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.recipe-page-content-container {
+.page-content-container {
   width: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -137,21 +131,4 @@ a, a:visited {
   box-shadow: none !important;
   text-shadow: none !important;
   transition: none !important;
-}
-
-/* ---- NOUVEAU CSS POUR L'IMAGE DE PIED DE PAGE EN IMPRESSION ---- */
-.print-footer-image-container {
-  page-break-inside: avoid !important; /* Essayer de garder tout ce conteneur sur une seule page */
-  margin-top: 2cm !important;      /* Espace au-dessus de l'image ; ajustez si nécessaire */
-  text-align: center !important;     /* Centrer l'image dans le conteneur */
-  width: 100% !important;          /* S'assurer qu'il prend toute la largeur disponible pour le centrage */
-}
-
-#print-page-footer-image {
-  max-width: 60% !important;        /* Largeur maximale de l'image par rapport à son conteneur */
-                                   /* Ajustez selon vos besoins, ex: 50%, 80%, ou une largeur fixe comme 10cm */
-  max-height: 4cm !important;       /* CRUCIAL : Définir une hauteur maximale pour l'image. */
-                                   /* Ajustez ceci en fonction de votre image et de l'espace souhaité. */
-  object-fit: contain !important;   /* Assure que le ratio de l'image est maintenu, s'adapte aux dimensions */
-  display: inline-block !important; /* Permet à text-align:center sur le parent de fonctionner et respecte le ratio de l'image */
 }
