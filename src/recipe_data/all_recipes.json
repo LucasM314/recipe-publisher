@@ -23,7 +23,7 @@
         },
         {
           "name": "Lardons fumés",
-          "quantity": "200g"
+          "quantity": "200 g"
         },
         {
           "name": "Tomates",
@@ -62,7 +62,7 @@
       "serves": "",
       "list": [
         {
-          "quantity": "350g",
+          "quantity": "350 g",
           "name": "farine"
         },
         {
@@ -74,7 +74,7 @@
           "name": "sel"
         },
         {
-          "quantity": "40g",
+          "quantity": "40 g",
           "name": "beurre"
         },
         {
@@ -82,7 +82,7 @@
           "name": "lait"
         },
         {
-          "quantity": "4/5 sachets de",
+          "quantity": "4/5 sachets",
           "name": "sucre vanillé"
         }
       ]
@@ -93,6 +93,57 @@
       "Pendant ce temps, mettre la farine, les oeufs, la moitié de lait puis mélanger",
       "Ajouter la moitié de lait restant, le beurre fondu, le sucre vanillé",
       "Laisse reposer (facultatif). Si la pâte est trop épaisse, ajouter un peu de lait."
+    ]
+  },
+  {
+    "name": "Tarte à la rhubarbe",
+    "type": "dessert",
+    "description": "Attention aux papas gourmands !",
+    "image_filename": "tarte_a_la_rhubarbe.webp",
+    "durations": {
+      "total": "",
+      "preparation": "",
+      "cooking": "1 heure environ",
+      "rest": ""
+    },
+    "ingredients": {
+      "serves": "",
+      "list": [
+        {
+          "name": "pâte feuilletée",
+          "quantity": "1"
+        },
+        {
+          "name": "petits pains au lait",
+          "quantity": "3"
+        },
+        {
+          "name": "beurre demi-sel",
+          "quantity": "60 g"
+        },
+        {
+          "name": "sucre en poudre",
+          "quantity": "100 g"
+        },
+        {
+          "name": "sachets de sucre vanillé",
+          "quantity": "2"
+        },
+        {
+          "name": "rhubarbe à volonté",
+          "quantity": ""
+        }
+      ]
+    },
+    "utensils": [],
+    "instructions": [
+      "Etaler la pâte feuilletée",
+      "Couper les pains au lait en 3 dans le sens de l'épaisseur et tapisser le fond de tarte",
+      "Faire fondre le beurre et napper les pains au lait",
+      "Mélanger les 2 sucres et napper le fond de tarte avec la moitié",
+      "Mettre la rhubarbe",
+      "Saupoudrer avec le reste de sucre",
+      "Faire cuire à 200° pendant 1 heure environ"
     ]
   },
   {
@@ -152,6 +203,57 @@
       "Ajouter les morceaux de pommes à la pâte et mélanger de nouveau.",
       "Verser la préparation dans un moule beurré.",
       "Cuire au four pendant 40 à 50 minutes, jusqu’à ce que le gâteau soit doré et bien cuit à cœur."
+    ]
+  },
+  {
+    "name": "Tarte à la rhubarbe",
+    "type": "dessert",
+    "description": "Attention aux papas gourmands !",
+    "image_filename": "tarte_a_la_rhubarbe.webp",
+    "durations": {
+      "total": "",
+      "preparation": "",
+      "cooking": "1 heure environ",
+      "rest": ""
+    },
+    "ingredients": {
+      "serves": "",
+      "list": [
+        {
+          "name": "pâte feuilletée",
+          "quantity": "1"
+        },
+        {
+          "name": "petits pains au lait",
+          "quantity": "3"
+        },
+        {
+          "name": "beurre demi-sel",
+          "quantity": "60 g"
+        },
+        {
+          "name": "sucre en poudre",
+          "quantity": "100 g"
+        },
+        {
+          "name": "sachets de sucre vanillé",
+          "quantity": "2"
+        },
+        {
+          "name": "rhubarbe à volonté",
+          "quantity": ""
+        }
+      ]
+    },
+    "utensils": [],
+    "instructions": [
+      "Etaler la pâte feuilletée",
+      "Couper les pains au lait en 3 dans le sens de l'épaisseur et tapisser le fond de tarte",
+      "Faire fondre le beurre et napper les pains au lait",
+      "Mélanger les 2 sucres et napper le fond de tarte avec la moitié",
+      "Mettre la rhubarbe",
+      "Saupoudrer avec le reste de sucre",
+      "Faire cuire à 200° pendant 1 heure environ"
     ]
   }
 ]

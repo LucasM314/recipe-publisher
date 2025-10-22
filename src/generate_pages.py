@@ -251,14 +251,9 @@ async def main():  # Changed to async main
 
             if "ingredients" in recipe_data and "list" in recipe_data["ingredients"]:
                 for ingredient_item in recipe_data["ingredients"]["list"]:
-                    original_quantity = ingredient_item.get("quantity")
-                    current_quantity_str = ""
-                    if original_quantity is not None:
-                        current_quantity_str = str(original_quantity).strip()
-                    needs_de = needs_de_separator(current_quantity_str)
-                    ingredient_item["quantity_display"] = current_quantity_str + (
-                        " de" if needs_de else ""
-                    )
+                    quantity = ingredient_item.get("quantity", "")
+                    needs_de = needs_de_separator(quantity)
+                    ingredient_item["quantity_display"] = quantity + " de"*needs_de
 
             image_filename_val = recipe_data.get("image_filename")
             image_path_for_template = None  # Renamed to avoid confusion

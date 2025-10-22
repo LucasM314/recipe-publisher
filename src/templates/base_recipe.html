@@ -99,7 +99,7 @@
         <h2>Ingrédients</h2>
         <ul class="ingredients-list">
           {% for ingredient_item in recipe.ingredients.list %}
-            <li>{{ ingredient_item.quantity }} {{ ingredient_item.name }}</li>
+            <li>{{ ingredient_item.quantity_display }} {{ ingredient_item.name }}</li>
           {% endfor %}
         </ul>
         <span class="separation-line"></span>
