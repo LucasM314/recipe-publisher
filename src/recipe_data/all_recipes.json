@@ -94,5 +94,64 @@
       "Ajouter la moitié de lait restant, le beurre fondu, le sucre vanillé",
       "Laisse reposer (facultatif). Si la pâte est trop épaisse, ajouter un peu de lait."
     ]
+  },
+  {
+    "name": "Gâteau aux pommes",
+    "type": "dessert",
+    "description": "Un gâteau moelleux et rapide à préparer, à déguster sans modération !",
+    "image_filename": "https://odelices.ouest-france.fr/images/recettes/2004/12/gateau-pommes-H-1024x683.jpg",
+    "durations": {
+      "total": "50 à 60 minutes",
+      "preparation": "10 à 15 minutes",
+      "cooking": "40 à 50 minutes",
+      "rest": ""
+    },
+    "ingredients": {
+      "serves": "6 personnes",
+      "list": [
+        {
+          "quantity": "100g",
+          "name": "sucre"
+        },
+        {
+          "quantity": "1 paquet",
+          "name": "sucre vanillé"
+        },
+        {
+          "quantity": "3",
+          "name": "œufs"
+        },
+        {
+          "quantity": "1/2 paquet",
+          "name": "levure chimique"
+        },
+        {
+          "quantity": "125g",
+          "name": "farine"
+        },
+        {
+          "quantity": "1/2 verre",
+          "name": "huile"
+        },
+        {
+          "quantity": "3 à 4",
+          "name": "pommes"
+        }
+      ]
+    },
+    "utensils": [
+      "Four",
+      "Moule à gâteau",
+      "Saladier",
+      "Fouet"
+    ],
+    "instructions": [
+      "Préchauffer le four à 160°C.",
+      "Dans un saladier, mélanger le sucre, le sucre vanillé, les œufs, la levure, la farine et l’huile jusqu’à obtenir une pâte homogène.",
+      "Éplucher les pommes et les couper en petits morceaux.",
+      "Ajouter les morceaux de pommes à la pâte et mélanger de nouveau.",
+      "Verser la préparation dans un moule beurré.",
+      "Cuire au four pendant 40 à 50 minutes, jusqu’à ce que le gâteau soit doré et bien cuit à cœur."
+    ]
   }
 ]
