@@ -139,15 +139,19 @@ def copy_asset_folder(source_dir_path: Path, dest_dir_path: Path, asset_name: st
     dest_dir_path.mkdir(parents=True, exist_ok=True)
     if source_dir_path.exists() and source_dir_path.is_dir():
         shutil.copytree(source_dir_path, dest_dir_path, dirs_exist_ok=True)
-        print(f"  {asset_name} files copied to: {dest_dir_path.relative_to(SRC_ROOT.parent)}")
+        print(
+            f"  {asset_name} files copied to: {dest_dir_path.relative_to(SRC_ROOT.parent)}"
+        )
     else:
         print(f"Warning: Source {asset_name} directory '{source_dir_path}' not found.")
+
 
 def copy_static_assets():
     print("\nCopying static assets...")
     copy_asset_folder(SOURCE_STATIC_CSS_DIR, OUTPUT_CSS_DIR, "CSS")
     copy_asset_folder(SOURCE_STATIC_JS_DIR, OUTPUT_JS_DIR, "JS")
     copy_asset_folder(SOURCE_STATIC_FONTS_DIR, OUTPUT_FONTS_DIR, "Fonts")
+
 
 # Renamed and modified for browser reuse and better logging
 async def generate_pdf_from_html_with_browser(
@@ -173,7 +177,7 @@ async def generate_pdf_from_html_with_browser(
                 "bottom": "20mm",
                 "left": "15mm",
                 "right": "15mm",
-            }
+            },
         }
         await page.pdf(**pdf_options)
         await page.close()  # Close the page, not the browser
@@ -182,9 +186,7 @@ async def generate_pdf_from_html_with_browser(
         )
         return True  # Indicate success
     except Exception as e:
-        print(
-            f"  Error generating PDF for '{recipe_name}' ({pdf_file_path.name}): {e}"
-        )
+        print(f"  Error generating PDF for '{recipe_name}' ({pdf_file_path.name}): {e}")
         traceback.print_exc()
         if page:  # Ensure page is closed on error too
             await page.close()
@@ -253,7 +255,7 @@ async def main():  # Changed to async main
                 for ingredient_item in recipe_data["ingredients"]["list"]:
                     quantity = ingredient_item.get("quantity", "")
                     needs_de = needs_de_separator(quantity)
-                    ingredient_item["quantity_display"] = quantity + " de"*needs_de
+                    ingredient_item["quantity_display"] = quantity + " de" * needs_de
 
             image_filename_val = recipe_data.get("image_filename")
             image_path_for_template = None  # Renamed to avoid confusion
@@ -335,17 +337,13 @@ async def main():  # Changed to async main
                 ):  # generate_pdf_from_html_with_browser returns True on success
                     successful_pdfs += 1
                 elif isinstance(result, Exception):
-                    print(
-                        f"  A PDF generation task encountered an exception: {result}"
-                    )
+                    print(f"  A PDF generation task encountered an exception: {result}")
 
             print(
                 f"\nPDF Generation Summary: {successful_pdfs} out of {len(pdf_generation_tasks)} PDFs generated successfully."
             )
             if successful_pdfs < len(pdf_generation_tasks):
-                print(
-                    "  Please check the logs above for specific errors."
-                )
+                print("  Please check the logs above for specific errors.")
         else:
             print("\nNo PDF generation tasks were scheduled.")
 
